@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "620495383398",
+    "project_id": "bullslot-23f8c",
+    "storage_bucket": "bullslot-23f8c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:620495383398:android:fc92debad6ec059c9776a7",
+        "android_client_info": {
+          "package_name": "com.kokodeal.bullslot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "620495383398-grhld5j83dalmpkhpj4eugjnfq76enld.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kokodeal.bullslot",
+            "certificate_hash": "41a469036742390d4373a12b042e8d0257122ff6"
+          }
+        },
+        {
+          "client_id": "620495383398-3cb8vlm9jijf4okfkl8oie76kfcbdbjs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1Bu3zcd-Dq_cAZm6HAWZ8rcgiBaeoHtw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "620495383398-3cb8vlm9jijf4okfkl8oie76kfcbdbjs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
