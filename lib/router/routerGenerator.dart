@@ -1,10 +1,14 @@
 import 'package:bullslot/screens/authentication/forgot.dart';
+import 'package:bullslot/screens/deliverRates.dart';
+import 'package:bullslot/screens/productDetails.dart';
 import 'package:flutter/material.dart';
 
 import '../root.dart';
 
 const String root = '/';
 const String forgotPassword = 'forgot-password';
+const String productDetails = 'product-details';
+const String deliveryRates = 'delivery-rates';
 
 class RouteGenerator {
   static Route<dynamic> onGeneratedRoutes(RouteSettings settings) {
@@ -18,6 +22,12 @@ class RouteGenerator {
 
       case forgotPassword:
         return _getPageRoute(const ForgotPasswordScreen());
+
+      case productDetails:
+        return _getPageRoute(const ProductDetails());
+
+      case deliveryRates:
+        return _getPageRoute(DeliverRates());
 
       default:
         return _errorRoute();

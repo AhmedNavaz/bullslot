@@ -1,5 +1,6 @@
 import 'package:bullslot/screens/authentication/body.dart';
-import 'package:bullslot/screens/home.dart';
+import 'package:bullslot/screens/bottom_nav/body.dart';
+import 'package:bullslot/screens/bottom_nav/home.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -12,7 +13,7 @@ class Root extends GetWidget<AuthController> {
   Widget build(BuildContext context) {
     return Obx(() {
       return (Get.find<AuthController>().firebaseUser != null)
-          ? const HomeScreen()
+          ? const BottomNavBar()
           : const AuthBody();
     });
   }
