@@ -64,22 +64,19 @@ class _LoginScreenState extends State<LoginScreen> {
                   alignment: Alignment.bottomLeft,
                   child: Text(
                     'Login',
-                    style: Theme.of(context).textTheme.headline1,
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline1!
+                        .copyWith(color: Colors.black),
                   ),
                 ),
                 ListTile(
                   minLeadingWidth: 20,
                   contentPadding: const EdgeInsets.only(left: 0, right: 0),
-                  leading: Icon(
-                    Icons.alternate_email_outlined,
-                    color: Colors.grey[600],
-                  ),
+                  leading: const Icon(Icons.alternate_email_outlined),
                   title: TextFormField(
                     controller: _emailController,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .copyWith(color: Colors.white),
+                    style: Theme.of(context).textTheme.bodyText1,
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.all(0),
                       hintText: 'Email',
@@ -87,13 +84,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           .textTheme
                           .bodyText1!
                           .copyWith(color: Colors.grey[600]),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Colors.grey[600]!, width: 2),
-                      ),
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Colors.grey[600]!, width: 0.5),
+                      focusedBorder: const UnderlineInputBorder(
+                        borderSide: BorderSide(color: secondaryColor, width: 2),
                       ),
                     ),
                     textInputAction: TextInputAction.next,
@@ -113,16 +105,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 ListTile(
                   minLeadingWidth: 20,
                   contentPadding: const EdgeInsets.only(left: 0, right: 0),
-                  leading: Icon(
-                    Icons.lock_outline,
-                    color: Colors.grey[600],
-                  ),
+                  leading: const Icon(Icons.lock_outline),
                   title: TextFormField(
                     controller: _passwordController,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .copyWith(color: Colors.white),
+                    style: Theme.of(context).textTheme.bodyText1,
                     obscureText: _obscureText,
                     decoration: InputDecoration(
                       suffixIcon: IconButton(
@@ -142,13 +128,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           .textTheme
                           .bodyText1!
                           .copyWith(color: Colors.grey[600]),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Colors.grey[600]!, width: 2),
-                      ),
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Colors.grey[600]!, width: 0.5),
+                      focusedBorder: const UnderlineInputBorder(
+                        borderSide: BorderSide(color: secondaryColor, width: 2),
                       ),
                     ),
                     textInputAction: TextInputAction.done,
@@ -206,12 +187,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                 const SizedBox(width: 12),
                                 Text(
                                   'Logging In...',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .copyWith(
-                                        color: secondaryColor,
-                                      ),
                                 ),
                               ]),
                         )

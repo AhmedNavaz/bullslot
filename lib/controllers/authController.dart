@@ -97,12 +97,13 @@ class AuthController extends GetxController {
 
   void signOut() async {
     try {
-      FirebaseFirestore.instance
-          .collection("users")
-          .doc(localUser.value.id)
-          .update({"token": FieldValue.delete()}).then((value) {
-        _auth.signOut();
-      });
+      // FirebaseFirestore.instance
+      //     .collection("users")
+      //     .doc(localUser.value.id)
+      //     .update({"token": FieldValue.delete()}).then((value) {
+      //   _auth.signOut();
+      // });
+      _auth.signOut();
     } catch (e) {
       Get.snackbar(
         '',

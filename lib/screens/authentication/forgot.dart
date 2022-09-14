@@ -23,12 +23,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.white,
         elevation: 0,
-        iconTheme: IconThemeData(color: Colors.white),
+        iconTheme: IconThemeData(color: Colors.black),
         title: Text(
           'Reset Password',
-          style: Theme.of(context).textTheme.headline1!.copyWith(fontSize: 22),
+          style: Theme.of(context)
+              .textTheme
+              .headline1!
+              .copyWith(fontSize: 22, color: Colors.black),
         ),
       ),
       body: SingleChildScrollView(
@@ -50,7 +53,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     alignment: Alignment.bottomLeft,
                     child: Text(
                       'Forgot\nPassword?',
-                      style: Theme.of(context).textTheme.headline1,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline1!
+                          .copyWith(color: Colors.black),
                     ),
                   ),
                   emailSent
@@ -72,10 +78,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyText1!
-                                      .copyWith(
-                                          height: 1.5,
-                                          fontSize: 14,
-                                          color: Colors.white)),
+                                      .copyWith(height: 1.5, fontSize: 14)),
                             ),
                             const SizedBox(height: 15),
                             Container(
@@ -94,10 +97,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyText1!
-                                      .copyWith(
-                                          height: 1.5,
-                                          fontSize: 14,
-                                          color: Colors.white)),
+                                      .copyWith(height: 1.5, fontSize: 14)),
                             ),
                           ],
                         )
@@ -108,25 +108,17 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyText1!
-                                    .copyWith(
-                                        height: 1.5,
-                                        fontSize: 14,
-                                        color: Colors.white)),
+                                    .copyWith(height: 1.5, fontSize: 14)),
                             const SizedBox(height: 30),
                             ListTile(
                               minLeadingWidth: 20,
                               contentPadding:
                                   const EdgeInsets.only(left: 0, right: 0),
-                              leading: Icon(
-                                Icons.alternate_email_outlined,
-                                color: Colors.grey[600],
-                              ),
+                              leading:
+                                  const Icon(Icons.alternate_email_outlined),
                               title: TextFormField(
                                 controller: resetEmailController,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1!
-                                    .copyWith(color: Colors.white),
+                                style: Theme.of(context).textTheme.bodyText1,
                                 decoration: InputDecoration(
                                   contentPadding: const EdgeInsets.all(0),
                                   hintText: 'Email',
@@ -134,13 +126,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                       .textTheme
                                       .bodyText1!
                                       .copyWith(color: Colors.grey[600]),
-                                  focusedBorder: UnderlineInputBorder(
+                                  focusedBorder: const UnderlineInputBorder(
                                     borderSide: BorderSide(
-                                        color: Colors.grey[600]!, width: 2),
-                                  ),
-                                  enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.grey[600]!, width: 0.5),
+                                        color: secondaryColor, width: 2),
                                   ),
                                 ),
                                 textInputAction: TextInputAction.done,
@@ -174,7 +162,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
-                                            const SizedBox(
+                                            SizedBox(
                                               width: 25,
                                               height: 25,
                                               child: CircularProgressIndicator(
@@ -186,14 +174,16 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                                 ),
                                               ),
                                             ),
-                                            const SizedBox(width: 12),
+                                            SizedBox(
+                                              width: 12,
+                                            ),
                                             Text(
                                               'Sending...',
                                               style: Theme.of(context)
                                                   .textTheme
-                                                  .bodyText1!
+                                                  .button!
                                                   .copyWith(
-                                                    color: secondaryColor,
+                                                    color: accentColor,
                                                   ),
                                             ),
                                           ]),
