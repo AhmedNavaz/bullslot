@@ -128,7 +128,11 @@ class _ProductStatusWidgetState extends State<ProductStatusWidget> {
                           : '${widget.productStatus!.status}'.split('.')[1] ==
                                   'REJECTED'
                               ? Colors.red
-                              : Colors.grey,
+                              : '${widget.productStatus!.status}'
+                                          .split('.')[1] ==
+                                      'REFUNDED'
+                                  ? Colors.blueAccent
+                                  : Colors.grey,
                   borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(20),
                       bottomRight: Radius.circular(20))),

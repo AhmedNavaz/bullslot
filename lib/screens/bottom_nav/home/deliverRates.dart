@@ -1,7 +1,7 @@
 import 'package:bullslot/models/city.dart';
 import 'package:flutter/material.dart';
 
-import '../models/deliveryRate.dart';
+import '../../../models/deliveryRate.dart';
 
 class DeliverRates extends StatelessWidget {
   DeliverRates({super.key});

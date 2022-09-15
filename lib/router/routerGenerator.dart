@@ -1,6 +1,8 @@
 import 'package:bullslot/screens/authentication/forgot.dart';
-import 'package:bullslot/screens/deliverRates.dart';
-import 'package:bullslot/screens/productDetails.dart';
+import 'package:bullslot/screens/bottom_nav/home/booking.dart';
+import 'package:bullslot/screens/bottom_nav/home/customRequest.dart';
+import 'package:bullslot/screens/bottom_nav/home/deliverRates.dart';
+import 'package:bullslot/screens/bottom_nav/home/productDetails.dart';
 import 'package:flutter/material.dart';
 
 import '../root.dart';
@@ -9,6 +11,8 @@ const String root = '/';
 const String forgotPassword = 'forgot-password';
 const String productDetails = 'product-details';
 const String deliveryRates = 'delivery-rates';
+const String customRequest = 'custom-request';
+const String booking = 'booking';
 
 class RouteGenerator {
   static Route<dynamic> onGeneratedRoutes(RouteSettings settings) {
@@ -28,6 +32,12 @@ class RouteGenerator {
 
       case deliveryRates:
         return _getPageRoute(DeliverRates());
+
+      case customRequest:
+        return _getPageRoute(CustomRequestScreen());
+
+      case booking:
+        return _getPageRoute(const BookingScreen());
 
       default:
         return _errorRoute();

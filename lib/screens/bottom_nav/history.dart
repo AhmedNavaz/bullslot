@@ -55,7 +55,19 @@ class HistoryScreen extends StatelessWidget {
             totalSlots: 6,
             bookedSlots: 2,
             weight: 90),
-        status: Status.REJECTED)
+        status: Status.REJECTED),
+    ProductStatus(
+        product: Product(
+            id: '5',
+            title: 'Mexican Cow',
+            image:
+                'https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8NHx8fGVufDB8fHx8&w=1000&q=80',
+            date: DateTime(2022, 9, 16),
+            totalPrice: 120000,
+            totalSlots: 6,
+            bookedSlots: 2,
+            weight: 90),
+        status: Status.REFUNDED)
   ];
 
   @override

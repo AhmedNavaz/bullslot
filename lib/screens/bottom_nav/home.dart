@@ -156,7 +156,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  navigationController.navigateTo(customRequest);
+                },
                 style: ElevatedButton.styleFrom(
                   fixedSize: const Size(145, 45),
                   backgroundColor: accentColor,

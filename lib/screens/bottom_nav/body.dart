@@ -77,8 +77,22 @@ class _BottomNavBarState extends State<BottomNavBar> {
                     ),
                   ),
                   ListTile(
-                    leading: const Icon(Icons.logout),
+                    leading: const Icon(Icons.logout_outlined),
                     title: const Text('Logout'),
+                    onTap: () {
+                      _authController.signOut();
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.policy_outlined),
+                    title: const Text('Terms and Conditions'),
+                    onTap: () {
+                      _authController.signOut();
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.contact_mail_outlined),
+                    title: const Text('Contact Us'),
                     onTap: () {
                       _authController.signOut();
                     },
