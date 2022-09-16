@@ -34,47 +34,51 @@ class CustomRequestScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Form(
           key: _formKey,
-          child: Column(
-            children: [
-              const SizedBox(height: 20),
-              Container(
-                alignment: Alignment.topLeft,
-                padding: const EdgeInsets.only(left: 20, bottom: 10),
-                child: Text('Kindly fill the form below to proceed.',
-                    style: Theme.of(context).textTheme.bodyText1),
-              ),
-              formField(
-                title: 'Name',
-                controller: nameController,
-                hintText: 'Enter you name',
-              ),
-              formField(
-                title: 'Contact',
-                controller: phoneController,
-                hintText: 'Enter your phone/whatsapp number with country code',
-                inputType: TextInputType.number,
-              ),
-              formField(
-                title: 'Slots',
-                controller: noOfSlotsController,
-                hintText: 'How many slots you want to buy?',
-              ),
-              formField(
-                title: 'Description',
-                controller: descriptionController,
-                hintText: 'Explain your request briefly',
-              ),
-              const SizedBox(height: 30),
-              ElevatedButton(
-                onPressed: () {
-                  navigationController.goBack();
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: accentColor,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              children: [
+                const SizedBox(height: 20),
+                Container(
+                  alignment: Alignment.topLeft,
+                  padding: const EdgeInsets.only(left: 20, bottom: 10),
+                  child: Text('Kindly fill the form below to proceed.',
+                      style: Theme.of(context).textTheme.bodyText1),
                 ),
-                child: const Text('Submit Request'),
-              )
-            ],
+                formField(
+                  title: 'Name',
+                  controller: nameController,
+                  hintText: 'Enter you name',
+                ),
+                formField(
+                  title: 'Contact',
+                  controller: phoneController,
+                  hintText:
+                      'Enter your phone/whatsapp number with country code',
+                  inputType: TextInputType.number,
+                ),
+                formField(
+                  title: 'Slots',
+                  controller: noOfSlotsController,
+                  hintText: 'How many slots you want to buy?',
+                ),
+                formField(
+                  title: 'Description',
+                  controller: descriptionController,
+                  hintText: 'Explain your request briefly',
+                ),
+                const SizedBox(height: 30),
+                ElevatedButton(
+                  onPressed: () {
+                    navigationController.goBack();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: accentColor,
+                  ),
+                  child: const Text('Submit Request'),
+                )
+              ],
+            ),
           ),
         ),
       ),

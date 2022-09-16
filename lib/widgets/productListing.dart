@@ -69,27 +69,24 @@ class _ProductListingWidgetState extends State<ProductListingWidget> {
                       .copyWith(fontSize: 18),
                 ),
               ),
-              // Positioned(
-              //   right: 0,
-              //   top: 0,
-              //   child: Container(
-              //     decoration: const BoxDecoration(
-              //       color: primaryColor,
-              //       borderRadius: BorderRadius.only(
-              //           bottomLeft: Radius.circular(20),
-              //           topRight: Radius.circular(20)),
-              //     ),
-              //     padding:
-              //         const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              //     child: Text(
-              //       'Slot ${widget.product!.totalSlots! - widget.product!.bookedSlots!}',
-              //       style: Theme.of(context)
-              //           .textTheme
-              //           .headline2!
-              //           .copyWith(fontSize: 18),
-              //     ),
-              //   ),
-              // ),
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Container(
+                  color: Colors.black.withOpacity(0.5),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 7.5, horizontal: 15),
+                  width: double.infinity,
+                  child: Text(
+                    '${widget.product!.title}',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText1!
+                        .copyWith(color: Colors.white),
+                  ),
+                ),
+              ),
             ],
           ),
           Container(
@@ -145,7 +142,10 @@ class _ProductListingWidgetState extends State<ProductListingWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  navigationController
+                      .navigateWithArg(booking, {'product': widget.product});
+                },
                 style: ElevatedButton.styleFrom(
                     fixedSize: const Size(150, 30),
                     backgroundColor: accentColor,
@@ -162,7 +162,8 @@ class _ProductListingWidgetState extends State<ProductListingWidget> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  navigationController.navigateTo(productDetails);
+                  navigationController.navigateWithArg(
+                      productDetails, {'product': widget.product});
                 },
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,

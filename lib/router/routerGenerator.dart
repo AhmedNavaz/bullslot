@@ -1,11 +1,14 @@
 import 'package:bullslot/screens/authentication/forgot.dart';
-import 'package:bullslot/screens/bottom_nav/home/booking.dart';
+import 'package:bullslot/screens/bottom_nav/home/booking/booking.dart';
 import 'package:bullslot/screens/bottom_nav/home/customRequest.dart';
 import 'package:bullslot/screens/bottom_nav/home/deliverRates.dart';
 import 'package:bullslot/screens/bottom_nav/home/productDetails.dart';
 import 'package:flutter/material.dart';
 
+import '../models/product.dart';
 import '../root.dart';
+import '../screens/bottom_nav/home/booking/checkout.dart';
+import '../screens/gallery.dart';
 
 const String root = '/';
 const String forgotPassword = 'forgot-password';
@@ -13,6 +16,8 @@ const String productDetails = 'product-details';
 const String deliveryRates = 'delivery-rates';
 const String customRequest = 'custom-request';
 const String booking = 'booking';
+const String checkout = 'checkout';
+const String gallery = 'gallery';
 
 class RouteGenerator {
   static Route<dynamic> onGeneratedRoutes(RouteSettings settings) {
@@ -28,7 +33,8 @@ class RouteGenerator {
         return _getPageRoute(const ForgotPasswordScreen());
 
       case productDetails:
-        return _getPageRoute(const ProductDetails());
+        return _getPageRoute(
+            ProductDetails(product: args['product'] as Product));
 
       case deliveryRates:
         return _getPageRoute(DeliverRates());
@@ -37,7 +43,17 @@ class RouteGenerator {
         return _getPageRoute(CustomRequestScreen());
 
       case booking:
-        return _getPageRoute(const BookingScreen());
+        return _getPageRoute(
+            BookingScreen(product: args['product'] as Product));
+
+      case checkout:
+        return _getPageRoute(CheckoutScreen(
+            product: args['product'] as Product,
+            bookedCount: args['bookedCount'] as int,
+            deliveryCharges: args['deliveryCharges'] as int));
+
+      case gallery:
+        return _getPageRoute(const GalleryScreen());
 
       default:
         return _errorRoute();

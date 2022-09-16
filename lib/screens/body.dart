@@ -1,11 +1,14 @@
 import 'package:bullslot/constants/colors.dart';
+import 'package:bullslot/constants/navigation.dart';
 import 'package:bullslot/screens/bottom_nav/history.dart';
 import 'package:bullslot/screens/bottom_nav/home.dart';
+import 'package:bullslot/screens/bottom_nav/liveSell.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../controllers/authController.dart';
-import '../../services/database.dart';
+import '../controllers/authController.dart';
+import '../router/routerGenerator.dart';
+import '../services/database.dart';
 
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({super.key});
@@ -27,6 +30,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   static final List<Widget> _widgetOptions = <Widget>[
     const HomeScreen(),
+    LiveSellScreen(),
     HistoryScreen(),
   ];
 
@@ -97,13 +101,31 @@ class _BottomNavBarState extends State<BottomNavBar> {
                       _authController.signOut();
                     },
                   ),
+                  ListTile(
+                    leading: const Icon(Icons.photo_outlined),
+                    title: const Text('Gallery'),
+                    onTap: () {
+                      navigationController.navigateTo(gallery);
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.group_outlined),
+                    title: const Text('About Us'),
+                    onTap: () {
+                      _authController.signOut();
+                    },
+                  ),
                 ],
               ),
             ),
             appBar: AppBar(
               backgroundColor: Colors.white,
               title: Text(
-                _selectedIndex == 0 ? 'Home' : 'History',
+                _selectedIndex == 0
+                    ? 'Home'
+                    : _selectedIndex == 1
+                        ? 'Live Sell'
+                        : 'History',
                 style: Theme.of(context)
                     .textTheme
                     .headline2!
@@ -114,8 +136,12 @@ class _BottomNavBarState extends State<BottomNavBar> {
             bottomNavigationBar: BottomNavigationBar(
               items: const <BottomNavigationBarItem>[
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.home),
-                  label: 'Home',
+                  icon: Icon(Icons.home_outlined),
+                  label: 'Slot Deal',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.discount_outlined),
+                  label: 'Live Sell',
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.history),

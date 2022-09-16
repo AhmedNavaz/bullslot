@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bullslot/constants/colors.dart';
 import 'package:bullslot/constants/navigation.dart';
 import 'package:bullslot/controllers/authController.dart';
@@ -30,10 +32,10 @@ class _HomeScreenState extends State<HomeScreen> {
         title: 'Australian Cow',
         image:
             'https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8NHx8fGVufDB8fHx8&w=1000&q=80',
-        date: DateTime(2022, 9, 15),
+        date: DateTime(2022, 9, 19),
         totalPrice: 210000,
         totalSlots: 7,
-        bookedSlots: 0,
+        bookedSlots: 3,
         weight: 100),
     Product(
         id: '2',
@@ -80,10 +82,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: CarouselSlider(
                       options: CarouselOptions(
                           initialPage: 0,
-                          autoPlayInterval: const Duration(seconds: 3),
-                          autoPlayAnimationDuration:
-                              const Duration(milliseconds: 800),
-                          autoPlayCurve: Curves.fastOutSlowIn,
+                          autoPlay: true,
+                          autoPlayInterval: const Duration(seconds: 5),
                           onPageChanged: (index, reason) {
                             setState(() {
                               _currentCarouselIndex = index;

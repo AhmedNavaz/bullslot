@@ -1,8 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
+import '../../../models/product.dart';
+import '../../../services/utils.dart';
+
 class ProductDetails extends StatefulWidget {
-  const ProductDetails({super.key});
+  ProductDetails({super.key, this.product});
+
+  Product? product;
 
   @override
   State<ProductDetails> createState() => _ProductDetailsState();
@@ -15,6 +22,25 @@ class _ProductDetailsState extends State<ProductDetails> {
     'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Koe_in_weiland_bij_Gorssel.JPG/800px-Koe_in_weiland_bij_Gorssel.JPG'
   ];
   int carouselIndex = 0;
+
+  Utils utils = Utils();
+
+  late String clock;
+  late Timer clockSec;
+
+  @override
+  void initState() {
+    super.initState();
+
+    clock = DateTime.now().second.toString();
+    // defines a timer
+    clockSec = Timer.periodic(const Duration(seconds: 1), (Timer t) {
+      setState(() {
+        clock = DateTime.now().second.toString();
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,6 +64,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                   height: MediaQuery.of(context).size.height * 0.3,
                   viewportFraction: 0.9,
                   enableInfiniteScroll: false,
+                  autoPlay: true,
                   onPageChanged: (index, _) {
                     setState(() {
                       carouselIndex = index;
@@ -67,10 +94,27 @@ class _ProductDetailsState extends State<ProductDetails> {
             ),
             const SizedBox(height: 20),
             Container(
+              decoration: const BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.only(
+                    bottomRight: Radius.circular(20),
+                    topLeft: Radius.circular(20)),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              child: Text(
+                'Time Remaining: ${utils.getRemainingTime(widget.product!.date!)}',
+                style: Theme.of(context)
+                    .textTheme
+                    .headline2!
+                    .copyWith(fontSize: 18),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Container(
               width: MediaQuery.of(context).size.width * 0.85,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                color: Color(0xffEAE9EE),
+                color: const Color(0xffEAE9EE),
               ),
               child: Padding(
                 padding: const EdgeInsets.all(20),
@@ -113,25 +157,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                             ),
                             const SizedBox(height: 15),
                             Text(
-                              'Weight',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText2!
-                                  .copyWith(color: Colors.grey),
-                            ),
-                            Text(
-                              '200Kg',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .copyWith(fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
                               'Total Slots',
                               style: Theme.of(context)
                                   .textTheme
@@ -145,7 +170,11 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   .bodyText1!
                                   .copyWith(fontWeight: FontWeight.bold),
                             ),
-                            const SizedBox(height: 15),
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
                             Text(
                               'Original Price',
                               style: Theme.of(context)
@@ -155,6 +184,21 @@ class _ProductDetailsState extends State<ProductDetails> {
                             ),
                             Text(
                               '234234',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1!
+                                  .copyWith(fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(height: 15),
+                            Text(
+                              'Remaining Slots',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2!
+                                  .copyWith(color: Colors.grey),
+                            ),
+                            Text(
+                              '2',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyText1!
@@ -181,7 +225,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Policy',
+                      'Terms & Conditions',
                       style: Theme.of(context)
                           .textTheme
                           .headline2!

@@ -64,6 +64,24 @@ class _ProductStatusWidgetState extends State<ProductStatusWidget> {
                       .copyWith(fontSize: 18),
                 ),
               ),
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Container(
+                  color: Colors.black.withOpacity(0.5),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 7.5, horizontal: 15),
+                  width: double.infinity,
+                  child: Text(
+                    '${widget.productStatus!.product!.title}',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText1!
+                        .copyWith(color: Colors.white),
+                  ),
+                ),
+              ),
             ],
           ),
           Container(

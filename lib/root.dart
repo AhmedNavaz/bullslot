@@ -1,5 +1,5 @@
 import 'package:bullslot/screens/authentication/body.dart';
-import 'package:bullslot/screens/bottom_nav/body.dart';
+import 'package:bullslot/screens/body.dart';
 import 'package:bullslot/screens/bottom_nav/home.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
