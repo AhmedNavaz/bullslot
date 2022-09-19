@@ -7,21 +7,9 @@ class DeliverRates extends StatelessWidget {
   DeliverRates({super.key});
 
   final List<DeliveryRate> _deliveryRates = [
-    DeliveryRate(
-        id: '1',
-        city: City(id: '1', name: 'New York'),
-        type: DeliveryType.CAR,
-        rate: 20),
-    DeliveryRate(
-        id: '2',
-        city: City(id: '2', name: 'LA'),
-        type: DeliveryType.CAR,
-        rate: 12),
-    DeliveryRate(
-        id: '3',
-        city: City(id: '3', name: 'Washington'),
-        type: DeliveryType.CAR,
-        rate: 10)
+    DeliveryRate(city: City('New York'), type: DeliveryType.CAR, rate: 20),
+    DeliveryRate(city: City('LA'), type: DeliveryType.CAR, rate: 12),
+    DeliveryRate(city: City('Washington'), type: DeliveryType.CAR, rate: 10)
   ];
 
   @override

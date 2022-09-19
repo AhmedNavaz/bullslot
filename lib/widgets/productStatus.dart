@@ -99,7 +99,7 @@ class _ProductStatusWidgetState extends State<ProductStatusWidget> {
                       .copyWith(color: Colors.white),
                 ),
                 Text(
-                  'Remaining Slots:   ${widget.productStatus!.product!.totalSlots! - widget.productStatus!.product!.bookedSlots!}'
+                  'Remaining Slots:   ${widget.productStatus!.product!.totalSlots! - widget.productStatus!.product!.availableSlots!}'
                       .split('.')[0],
                   style: Theme.of(context)
                       .textTheme

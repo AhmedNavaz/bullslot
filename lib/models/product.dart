@@ -1,12 +1,20 @@
+import 'dart:core';
+
+import 'city.dart';
+import 'deliveryRate.dart';
+
 class Product {
   String? id;
   String? title;
   String? image;
   DateTime? date;
   double? totalPrice;
+  City? location;
+  bool? freeDelivery;
+  List<DeliveryRate>? deliveryRates;
+  double? officePickupRate;
   int? totalSlots;
-  int? bookedSlots;
-  double? weight; // in kg
+  int? availableSlots;
 
   Product({
     this.id,
@@ -14,8 +22,11 @@ class Product {
     this.image,
     this.date,
     this.totalPrice,
+    this.location,
+    this.freeDelivery,
+    this.deliveryRates,
+    this.officePickupRate,
     this.totalSlots,
-    this.bookedSlots,
-    this.weight,
+    this.availableSlots,
   });
 }

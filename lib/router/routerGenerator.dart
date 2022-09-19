@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import '../models/product.dart';
 import '../root.dart';
 import '../screens/bottom_nav/home/booking/checkout.dart';
+import '../screens/contactUs.dart';
 import '../screens/gallery.dart';
 
 const String root = '/';
@@ -18,6 +19,7 @@ const String customRequest = 'custom-request';
 const String booking = 'booking';
 const String checkout = 'checkout';
 const String gallery = 'gallery';
+const String contactUs = 'contact-us';
 
 class RouteGenerator {
   static Route<dynamic> onGeneratedRoutes(RouteSettings settings) {
@@ -48,12 +50,17 @@ class RouteGenerator {
 
       case checkout:
         return _getPageRoute(CheckoutScreen(
-            product: args['product'] as Product,
-            bookedCount: args['bookedCount'] as int,
-            deliveryCharges: args['deliveryCharges'] as int));
+          product: args['product'] as Product,
+          bookedCount: args['bookedCount'] as int,
+          deliveryCharges: args['deliveryCharges'] as double,
+          deliveryType: args['deliveryType'] as String,
+        ));
 
       case gallery:
         return _getPageRoute(const GalleryScreen());
+
+      case contactUs:
+        return _getPageRoute(ContactUsScreen());
 
       default:
         return _errorRoute();

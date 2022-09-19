@@ -1,9 +1,11 @@
 import 'package:bullslot/constants/colors.dart';
-import 'package:bullslot/models/liveProduct.dart';
-import 'package:bullslot/widgets/liveSellListing.dart';
+import 'package:bullslot/models/city.dart';
+import 'package:bullslot/widgets/productListing.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants/images.dart';
+import '../../models/deliveryRate.dart';
+import '../../models/product.dart';
 
 class LiveSellScreen extends StatefulWidget {
   LiveSellScreen({super.key});
@@ -15,22 +17,47 @@ class LiveSellScreen extends StatefulWidget {
 class _LiveSellScreenState extends State<LiveSellScreen> {
   int categoryIndex = -1;
 
-  List<LiveProduct> liveProductLists = [
-    LiveProduct(
+  List<Product> liveProductLists = [
+    Product(
       id: '1',
       title: 'Australian Cow',
       image:
           'https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8NHx8fGVufDB8fHx8&w=1000&q=80',
       date: DateTime(2022, 9, 19),
       totalPrice: 210000,
+      location: City('Texas'),
+      freeDelivery: true,
+      deliveryRates: null,
+      officePickupRate: null,
+      totalSlots: null,
+      availableSlots: null,
     ),
-    LiveProduct(
+    Product(
       id: '2',
       title: 'African Cow',
       image:
           'https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8NHx8fGVufDB8fHx8&w=1000&q=80',
       date: DateTime(2022, 9, 16),
       totalPrice: 120000,
+      location: City('Lagos'),
+      freeDelivery: false,
+      deliveryRates: [
+        DeliveryRate(
+          city: City('Lahore'),
+          rate: 100,
+        ),
+        DeliveryRate(
+          city: City('Karachi'),
+          rate: 200,
+        ),
+        DeliveryRate(
+          city: City('Islamabad'),
+          rate: 300,
+        ),
+      ],
+      officePickupRate: 100,
+      totalSlots: null,
+      availableSlots: null,
     )
   ];
 
@@ -129,8 +156,8 @@ class _LiveSellScreenState extends State<LiveSellScreen> {
               itemCount: liveProductLists.length,
               itemBuilder: (context, index) {
                 return Container(
-                  margin: const EdgeInsets.only(left: 30, right: 30, top: 20),
-                  child: LiveSellListingWidget(
+                  margin: const EdgeInsets.only(left: 20, right: 20, top: 20),
+                  child: ProductListingWidget(
                     product: liveProductLists[index],
                   ),
                 );

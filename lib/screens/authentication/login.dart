@@ -38,8 +38,18 @@ class _LoginScreenState extends State<LoginScreen> {
         _isLoading = true;
       });
       _formKey.currentState!.save();
-      _authController.signIn(
-          _emailController.text.trim(), _passwordController.text.trim());
+      _authController
+          .signIn(
+        _emailController.text.trim(),
+        _passwordController.text.trim(),
+      )
+          .then((value) {
+        if (value == null) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
+      });
     }
   }
 
@@ -173,8 +183,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       ? Center(
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const SizedBox(
+                              children: const [
+                                SizedBox(
                                   width: 25,
                                   height: 25,
                                   child: CircularProgressIndicator(
@@ -184,7 +194,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(width: 12),
+                                SizedBox(width: 12),
                                 Text(
                                   'Logging In...',
                                 ),

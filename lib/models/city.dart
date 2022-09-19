@@ -1,6 +1,5 @@
 class City {
-  String? id;
   String? name;
 
-  City({this.id, this.name});
+  City(this.name);
 }

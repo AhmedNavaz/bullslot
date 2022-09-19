@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bullslot/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -31,7 +32,7 @@ class _ProductDetailsState extends State<ProductDetails> {
   @override
   void initState() {
     super.initState();
-
+    print(widget.product.runtimeType);
     clock = DateTime.now().second.toString();
     // defines a timer
     clockSec = Timer.periodic(const Duration(seconds: 1), (Timer t) {
@@ -109,6 +110,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                     .copyWith(fontSize: 18),
               ),
             ),
+            const SizedBox(height: 5),
+            Text('Location: ${widget.product!.location!.name}',
+                style: Theme.of(context).textTheme.bodyText1),
             const SizedBox(height: 20),
             Container(
               width: MediaQuery.of(context).size.width * 0.85,
@@ -121,12 +125,26 @@ class _ProductDetailsState extends State<ProductDetails> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Description',
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline2!
-                          .copyWith(color: Colors.black, fontSize: 22),
+                    Row(
+                      children: [
+                        Text(
+                          'Description',
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline2!
+                              .copyWith(color: Colors.black, fontSize: 22),
+                        ),
+                        const Spacer(),
+                        widget.product!.freeDelivery!
+                            ? Text(
+                                'Free Delivery',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText2!
+                                    .copyWith(color: accentColor),
+                              )
+                            : Container()
+                      ],
                     ),
                     const SizedBox(height: 15),
                     Text(
@@ -156,20 +174,24 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   .copyWith(fontWeight: FontWeight.bold),
                             ),
                             const SizedBox(height: 15),
-                            Text(
-                              'Total Slots',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText2!
-                                  .copyWith(color: Colors.grey),
-                            ),
-                            Text(
-                              '7',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .copyWith(fontWeight: FontWeight.bold),
-                            ),
+                            widget.product!.totalSlots != null
+                                ? Text(
+                                    'Total Slots',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText2!
+                                        .copyWith(color: Colors.grey),
+                                  )
+                                : Container(),
+                            widget.product!.totalSlots != null
+                                ? Text(
+                                    '${widget.product!.totalSlots}',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .copyWith(fontWeight: FontWeight.bold),
+                                  )
+                                : Container(),
                           ],
                         ),
                         Column(
@@ -190,52 +212,27 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   .copyWith(fontWeight: FontWeight.bold),
                             ),
                             const SizedBox(height: 15),
-                            Text(
-                              'Remaining Slots',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText2!
-                                  .copyWith(color: Colors.grey),
-                            ),
-                            Text(
-                              '2',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .copyWith(fontWeight: FontWeight.bold),
-                            ),
+                            widget.product!.totalSlots != null
+                                ? Text(
+                                    'Remaining Slots',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText2!
+                                        .copyWith(color: Colors.grey),
+                                  )
+                                : Container(),
+                            widget.product!.totalSlots != null
+                                ? Text(
+                                    '${widget.product!.availableSlots}',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .copyWith(fontWeight: FontWeight.bold),
+                                  )
+                                : Container(),
                           ],
                         )
                       ],
-                    )
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            Container(
-              width: MediaQuery.of(context).size.width * 0.85,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: Color(0xffEAE9EE),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Terms & Conditions',
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline2!
-                          .copyWith(color: Colors.black, fontSize: 22),
-                    ),
-                    const SizedBox(height: 15),
-                    Text(
-                      'asldkfjasd sld;fkjs odflksdjf sad;fkljsadio fjsd;lfjksd;iofjasd;lfj as;ldfjasdofjasd;lkfjaweoifjsdlfjasdklfjas df;sdklfjsd;iofjoas;djfklasdjf;oisdjf;lsajga;lgjasiofj  sdf;iasdojfosjf a;l',
-                      style: Theme.of(context).textTheme.bodyText2,
-                      textAlign: TextAlign.justify,
                     )
                   ],
                 ),

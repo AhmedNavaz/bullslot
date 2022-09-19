@@ -11,6 +11,8 @@ import 'package:get/get.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 import '../../constants/images.dart';
+import '../../models/city.dart';
+import '../../models/deliveryRate.dart';
 import '../../models/product.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -28,25 +30,65 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final List<Product> _productList = [
     Product(
-        id: '1',
-        title: 'Australian Cow',
-        image:
-            'https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8NHx8fGVufDB8fHx8&w=1000&q=80',
-        date: DateTime(2022, 9, 19),
-        totalPrice: 210000,
-        totalSlots: 7,
-        bookedSlots: 3,
-        weight: 100),
+      id: '1',
+      title: 'Australian Cow',
+      image:
+          'https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8NHx8fGVufDB8fHx8&w=1000&q=80',
+      date: DateTime(2022, 9, 19),
+      totalPrice: 210000,
+      totalSlots: 7,
+      availableSlots: 3,
+      location: City('New York'),
+      freeDelivery: false,
+      deliveryRates: [
+        DeliveryRate(
+          city: City('New York'),
+          rate: 1000,
+        ),
+        DeliveryRate(
+          city: City('Los Angeles'),
+          rate: 2000,
+        ),
+        DeliveryRate(
+          city: City('Chicago'),
+          rate: 3000,
+        ),
+      ],
+      officePickupRate: 1000,
+    ),
     Product(
-        id: '2',
-        title: 'African Cow',
-        image:
-            'https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8NHx8fGVufDB8fHx8&w=1000&q=80',
-        date: DateTime(2022, 9, 16),
-        totalPrice: 120000,
-        totalSlots: 6,
-        bookedSlots: 6,
-        weight: 90)
+      id: '2',
+      title: 'African Cow',
+      image:
+          'https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8NHx8fGVufDB8fHx8&w=1000&q=80',
+      date: DateTime(2022, 9, 16),
+      totalPrice: 120000,
+      totalSlots: 6,
+      availableSlots: 6,
+      location: City('Los Angeles'),
+      freeDelivery: true,
+      deliveryRates: null,
+      officePickupRate: null,
+    ),
+    Product(
+      id: '3',
+      title: 'Sahiwal Cow',
+      image:
+          'https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8NHx8fGVufDB8fHx8&w=1000&q=80',
+      date: DateTime(2022, 9, 22),
+      totalPrice: 150000,
+      totalSlots: 7,
+      availableSlots: 6,
+      location: City('Pakistan'),
+      freeDelivery: false,
+      deliveryRates: [
+        DeliveryRate(
+          city: City('New York'),
+          rate: 1000,
+        ),
+      ],
+      officePickupRate: null,
+    ),
   ];
 
   String dropdownvalue = 'New York';
@@ -144,14 +186,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   navigationController.navigateTo(deliveryRates);
                 },
                 style: ElevatedButton.styleFrom(
-                  fixedSize: const Size(145, 45),
                   backgroundColor: secondaryColor,
                 ),
                 child: Row(
                   children: const [
                     Icon(Icons.delivery_dining),
                     SizedBox(width: 5),
-                    Text('24/7 Delivery\n Check Rate')
+                    Text('24/7 Check Rate')
                   ],
                 ),
               ),
@@ -160,7 +201,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   navigationController.navigateTo(customRequest);
                 },
                 style: ElevatedButton.styleFrom(
-                  fixedSize: const Size(145, 45),
                   backgroundColor: accentColor,
                 ),
                 child: const Text('Custom Request'),

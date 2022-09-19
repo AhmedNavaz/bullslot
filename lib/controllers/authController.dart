@@ -71,6 +71,7 @@ class AuthController extends GetxController {
         snackPosition: SnackPosition.BOTTOM,
         duration: const Duration(seconds: 3),
       );
+      return null;
     }
   }
 

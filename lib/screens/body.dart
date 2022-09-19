@@ -98,7 +98,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                     leading: const Icon(Icons.contact_mail_outlined),
                     title: const Text('Contact Us'),
                     onTap: () {
-                      _authController.signOut();
+                      navigationController.navigateTo(contactUs);
                     },
                   ),
                   ListTile(
