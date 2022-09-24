@@ -17,11 +17,6 @@ class ProductDetails extends StatefulWidget {
 }
 
 class _ProductDetailsState extends State<ProductDetails> {
-  List<String> carouselImages = [
-    'https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8NHx8fGVufDB8fHx8&w=1000&q=80',
-    'https://cdn.britannica.com/22/522-050-25222A61/Jersey-cow.jpg',
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Koe_in_weiland_bij_Gorssel.JPG/800px-Koe_in_weiland_bij_Gorssel.JPG'
-  ];
   int carouselIndex = 0;
 
   Utils utils = Utils();
@@ -71,7 +66,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                       carouselIndex = index;
                     });
                   }),
-              items: carouselImages.map((i) {
+              items: widget.product!.images!.map((i) {
                 return Builder(
                   builder: (BuildContext context) {
                     return Container(
@@ -111,7 +106,7 @@ class _ProductDetailsState extends State<ProductDetails> {
               ),
             ),
             const SizedBox(height: 5),
-            Text('Location: ${widget.product!.location!.name}',
+            Text('Location: ${widget.product!.location!}',
                 style: Theme.of(context).textTheme.bodyText1),
             const SizedBox(height: 20),
             Container(
@@ -125,26 +120,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        Text(
-                          'Description',
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline2!
-                              .copyWith(color: Colors.black, fontSize: 22),
-                        ),
-                        const Spacer(),
-                        widget.product!.freeDelivery!
-                            ? Text(
-                                'Free Delivery',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText2!
-                                    .copyWith(color: accentColor),
-                              )
-                            : Container()
-                      ],
+                    Text(
+                      'Description',
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline2!
+                          .copyWith(color: Colors.black, fontSize: 22),
                     ),
                     const SizedBox(height: 15),
                     Text(
@@ -167,7 +148,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   .copyWith(color: Colors.grey),
                             ),
                             Text(
-                              'Australian Cow',
+                              '${widget.product!.title}',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyText1!
@@ -192,11 +173,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                         .copyWith(fontWeight: FontWeight.bold),
                                   )
                                 : Container(),
-                          ],
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
+                            const SizedBox(height: 15),
                             Text(
                               'Original Price',
                               style: Theme.of(context)
@@ -205,7 +182,30 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   .copyWith(color: Colors.grey),
                             ),
                             Text(
-                              '234234',
+                              widget.product!.totalPrice!
+                                  .toDouble()
+                                  .toStringAsFixed(2),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1!
+                                  .copyWith(fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Delivery Charges',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2!
+                                  .copyWith(color: Colors.grey),
+                            ),
+                            Text(
+                              widget.product!.freeDelivery!
+                                  ? 'Free'
+                                  : 'Applicable',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyText1!
@@ -220,7 +220,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                         .bodyText2!
                                         .copyWith(color: Colors.grey),
                                   )
-                                : Container(),
+                                : Container(height: 20),
                             widget.product!.totalSlots != null
                                 ? Text(
                                     '${widget.product!.availableSlots}',
@@ -230,6 +230,27 @@ class _ProductDetailsState extends State<ProductDetails> {
                                         .copyWith(fontWeight: FontWeight.bold),
                                   )
                                 : Container(),
+                            const SizedBox(height: 15),
+                            widget.product!.totalSlots != null
+                                ? Text(
+                                    'Slot Price',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText2!
+                                        .copyWith(color: Colors.grey),
+                                  )
+                                : Container(),
+                            widget.product!.totalSlots != null
+                                ? Text(
+                                    (widget.product!.totalPrice! /
+                                            widget.product!.totalSlots!)
+                                        .toStringAsFixed(2),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .copyWith(fontWeight: FontWeight.bold),
+                                  )
+                                : Container()
                           ],
                         )
                       ],

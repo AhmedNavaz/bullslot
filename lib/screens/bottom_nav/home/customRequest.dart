@@ -11,8 +11,6 @@ class CustomRequestScreen extends StatelessWidget {
 
   TextEditingController nameController = TextEditingController();
 
-  TextEditingController noOfSlotsController = TextEditingController();
-
   TextEditingController descriptionController = TextEditingController();
 
   TextEditingController phoneController = TextEditingController();
@@ -53,14 +51,8 @@ class CustomRequestScreen extends StatelessWidget {
                 formField(
                   title: 'Contact',
                   controller: phoneController,
-                  hintText:
-                      'Enter your phone/whatsapp number with country code',
+                  hintText: 'Enter your phone/whatsapp number',
                   inputType: TextInputType.number,
-                ),
-                formField(
-                  title: 'Slots',
-                  controller: noOfSlotsController,
-                  hintText: 'How many slots you want to buy?',
                 ),
                 formField(
                   title: 'Description',

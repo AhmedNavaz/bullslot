@@ -30,7 +30,6 @@ class AuthController extends GetxController {
         id: _authResult.user!.uid,
         name: name,
         email: email,
-        dp: null,
       );
       localUser.value = _user;
       databaseMethods.uploadUserInfo(_user);

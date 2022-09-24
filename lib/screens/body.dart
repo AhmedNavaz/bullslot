@@ -19,6 +19,7 @@ class BottomNavBar extends StatefulWidget {
 
 class _BottomNavBarState extends State<BottomNavBar> {
   final AuthController _authController = Get.put(AuthController());
+
   var isLoading = true;
   int _selectedIndex = 0;
 
@@ -27,12 +28,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
       _selectedIndex = index;
     });
   }
-
-  static final List<Widget> _widgetOptions = <Widget>[
-    const HomeScreen(),
-    LiveSellScreen(),
-    HistoryScreen(),
-  ];
 
   DatabaseMethods databaseMethods = DatabaseMethods();
 
@@ -81,20 +76,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
                     ),
                   ),
                   ListTile(
-                    leading: const Icon(Icons.logout_outlined),
-                    title: const Text('Logout'),
-                    onTap: () {
-                      _authController.signOut();
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.policy_outlined),
-                    title: const Text('Terms and Conditions'),
-                    onTap: () {
-                      _authController.signOut();
-                    },
-                  ),
-                  ListTile(
                     leading: const Icon(Icons.contact_mail_outlined),
                     title: const Text('Contact Us'),
                     onTap: () {
@@ -111,6 +92,20 @@ class _BottomNavBarState extends State<BottomNavBar> {
                   ListTile(
                     leading: const Icon(Icons.group_outlined),
                     title: const Text('About Us'),
+                    onTap: () {
+                      _authController.signOut();
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.policy_outlined),
+                    title: const Text('Terms and Conditions'),
+                    onTap: () {
+                      _authController.signOut();
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.logout_outlined),
+                    title: const Text('Logout'),
                     onTap: () {
                       _authController.signOut();
                     },
@@ -152,7 +147,11 @@ class _BottomNavBarState extends State<BottomNavBar> {
               selectedItemColor: accentColor,
               onTap: _onItemTapped,
             ),
-            body: _widgetOptions.elementAt(_selectedIndex),
+            body: IndexedStack(index: _selectedIndex, children: [
+              const HomeScreen(),
+              LiveSellScreen(),
+              HistoryScreen(),
+            ]),
           );
   }
 }

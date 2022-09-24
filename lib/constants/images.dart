@@ -4,5 +4,3 @@ List<String> animalTypeImages = [
   'assets/images/sheep.png',
   'assets/images/camel.png'
 ];
-
-List<String> animalTypeNames = ['Cow', 'Goat', 'Lamb', 'Camel'];

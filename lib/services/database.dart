@@ -1,6 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
+import '../models/category.dart';
+import '../models/deliveryRate.dart';
+import '../models/image.dart';
+import '../models/location.dart';
+import '../models/product.dart';
 import '../models/user.dart';
 
 class DatabaseMethods extends GetxController {
@@ -20,8 +25,6 @@ class DatabaseMethods extends GetxController {
       "uid": user.id,
       "name": user.name,
       "email": user.email,
-      "dp": user.dp,
-      "token": user.token,
     }).catchError((e) {
       print(e.toString());
     });
@@ -34,6 +37,116 @@ class DatabaseMethods extends GetxController {
       DocumentSnapshot doc =
           await FirebaseFirestore.instance.collection("users").doc(uid).get();
       return doc.exists;
+    }
+  }
+
+  // get banner images
+  Future<List<ImageModel>> getBannerImages() async {
+    try {
+      final images =
+          await FirebaseFirestore.instance.collection('bannerImages').get();
+      return images.docs
+          .map((e) => ImageModel.fromJson(e.data() as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      print(e.toString());
+      rethrow;
+    }
+  }
+
+  // get gallery images
+  Future<List<ImageModel>> getGalleryImages() async {
+    try {
+      final images =
+          await FirebaseFirestore.instance.collection('galleryImages').get();
+      return images.docs
+          .map((e) => ImageModel.fromJson(e.data() as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      print(e.toString());
+      rethrow;
+    }
+  }
+
+  // get delivery rates
+  Future<List<DeliveryRate>> getDeliveryRates() async {
+    try {
+      final deliveryRates = await FirebaseFirestore.instance
+          .collection('deliveryRates')
+          .orderBy('location')
+          .get();
+      return deliveryRates.docs
+          .map((e) => DeliveryRate.fromJson(e.data() as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      print(e.toString());
+      rethrow;
+    }
+  }
+
+  // get categories
+  Future<List<Category>> getCategories() async {
+    try {
+      final categories = await FirebaseFirestore.instance
+          .collection('categories')
+          .orderBy('name')
+          .get();
+      return categories.docs
+          .map((e) => Category.fromJson(e.data() as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      print(e.toString());
+      rethrow;
+    }
+  }
+
+  // get locations
+  Future<List<Location>> getLocations() async {
+    try {
+      final locations = await FirebaseFirestore.instance
+          .collection('locations')
+          .orderBy('name')
+          .get();
+      return locations.docs
+          .map((e) => Location.fromJson(e.data() as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      print(e.toString());
+      rethrow;
+    }
+  }
+
+  Future<List<Product>> getProducts() async {
+    try {
+      final products = await FirebaseFirestore.instance
+          .collection('products')
+          .orderBy('title')
+          .get();
+      return products.docs
+          .map((e) => Product.fromJson(e.data() as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      print(e.toString());
+      rethrow;
+    }
+  }
+
+  // send message
+  Future<void> sendMessage(String name, String email, String title,
+      String description, String phone) async {
+    try {
+      await FirebaseFirestore.instance.collection('messages').add({
+        'name': name,
+        'email': email,
+        'title': title,
+        'description': description,
+        'phone': phone,
+        'timestamp': DateTime.now().millisecondsSinceEpoch,
+        'isRead': false,
+      });
+    } catch (e) {
+      print(e.toString());
+      rethrow;
     }
   }
 }

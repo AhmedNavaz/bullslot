@@ -45,7 +45,7 @@ class _ProductStatusWidgetState extends State<ProductStatusWidget> {
                 borderRadius: const BorderRadius.only(
                     topRight: Radius.circular(20),
                     topLeft: Radius.circular(20)),
-                child: Image.network(widget.productStatus!.product!.image!),
+                child: Image.network(widget.productStatus!.product!.images![0]),
               ),
               Container(
                 decoration: const BoxDecoration(

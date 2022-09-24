@@ -245,9 +245,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         context: context,
                         barrierDismissible: false,
                         builder: (context) => AlertDialog(
-                          title: const Text('Verfication in Progress'),
                           content: Text(
-                            'Your payment is being verified',
+                            'Your payment is pending awaiting verification.',
                             style: Theme.of(context).textTheme.bodyText1,
                           ),
                           actions: [

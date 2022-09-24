@@ -57,7 +57,7 @@ class RouteGenerator {
         ));
 
       case gallery:
-        return _getPageRoute(const GalleryScreen());
+        return _getPageRoute(GalleryScreen());
 
       case contactUs:
         return _getPageRoute(ContactUsScreen());

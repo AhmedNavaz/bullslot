@@ -50,7 +50,12 @@ class _ProductListingWidgetState extends State<ProductListingWidget> {
                 borderRadius: const BorderRadius.only(
                     topRight: Radius.circular(20),
                     topLeft: Radius.circular(20)),
-                child: Image.network(widget.product!.image!),
+                child: Image.network(
+                  widget.product!.images![0],
+                  height: 200,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
               ),
               Container(
                 decoration: const BoxDecoration(
@@ -96,7 +101,7 @@ class _ProductListingWidgetState extends State<ProductListingWidget> {
                             size: 20,
                           ),
                           Text(
-                            '${widget.product!.location!.name}',
+                            widget.product!.location!,
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyText2!

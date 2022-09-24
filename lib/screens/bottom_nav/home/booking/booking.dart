@@ -20,7 +20,7 @@ class BookingScreen extends StatefulWidget {
 class _BookingScreenState extends State<BookingScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  bool? officePickup;
+  var officePickupSelected = false;
 
   var value;
 
@@ -161,37 +161,43 @@ class _BookingScreenState extends State<BookingScreen> {
                           color: accentColor, fontWeight: FontWeight.bold),
                     )
                   : Container(),
-              widget.product!.officePickupRate != null
-                  ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Office Pickup',
-                          style: Theme.of(context).textTheme.bodyText2,
-                        ),
-                        ListTile(
-                          title: Text(
-                            '\$${widget.product!.officePickupRate}',
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline2!
-                                .copyWith(color: Colors.black, fontSize: 20),
-                          ),
-                          trailing: IconButton(
-                              icon: value == 0
-                                  ? const Icon(
-                                      Icons.radio_button_on_outlined,
-                                      color: primaryColor,
-                                    )
-                                  : const Icon(Icons.radio_button_off_outlined),
-                              onPressed: () {
-                                setState(() {
-                                  value = 0;
-                                  officePickup = true;
-                                });
-                              }),
-                        )
-                      ],
+              widget.product!.officePickup!
+                  ? ListTile(
+                      title: Text(
+                        'Office Pickup',
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline2!
+                            .copyWith(color: Colors.black, fontSize: 20),
+                      ),
+                      trailing: IconButton(
+                          icon: value == 0
+                              ? const Icon(
+                                  Icons.radio_button_on_outlined,
+                                  color: primaryColor,
+                                )
+                              : const Icon(Icons.radio_button_off_outlined),
+                          onPressed: () {
+                            setState(() {
+                              value = 0;
+                              officePickupSelected = true;
+                            });
+                          }),
+                    )
+                  : Container(),
+              officePickupSelected
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Office Address',
+                              style: Theme.of(context).textTheme.bodyText2),
+                          Text('420 Pennsylvania St. Jersey City, NJ 07302',
+                              style: Theme.of(context).textTheme.bodyText1),
+                          const SizedBox(height: 10),
+                        ],
+                      ),
                     )
                   : Container(),
               widget.product!.deliveryRates != null
@@ -200,7 +206,10 @@ class _BookingScreenState extends State<BookingScreen> {
                       children: [
                         Text(
                           'Area Delivery',
-                          style: Theme.of(context).textTheme.bodyText2,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText2!
+                              .copyWith(fontWeight: FontWeight.bold),
                         ),
                         for (int i = 0;
                             i < widget.product!.deliveryRates!.length;
@@ -214,7 +223,7 @@ class _BookingScreenState extends State<BookingScreen> {
                                   .copyWith(color: Colors.black, fontSize: 20),
                             ),
                             title: Text(
-                              '(${widget.product!.deliveryRates![i].city!.name})',
+                              '(${widget.product!.deliveryRates![i].location})',
                               style: Theme.of(context).textTheme.bodyText1,
                             ),
                             trailing: IconButton(
@@ -228,7 +237,7 @@ class _BookingScreenState extends State<BookingScreen> {
                                 onPressed: () {
                                   setState(() {
                                     value = i + 1;
-                                    officePickup = false;
+                                    officePickupSelected = false;
                                   });
                                 }),
                           )
@@ -252,11 +261,13 @@ class _BookingScreenState extends State<BookingScreen> {
                       hintText: 'Enter you phone/whatsapp number',
                       inputType: TextInputType.phone,
                     ),
-                    formField(
-                      title: 'Shipping Address',
-                      controller: addressController,
-                      hintText: 'Enter your shipping address',
-                    ),
+                    officePickupSelected
+                        ? Container()
+                        : formField(
+                            title: 'Shipping Address',
+                            controller: addressController,
+                            hintText: 'Enter your shipping address',
+                          ),
                   ],
                 ),
               ),
@@ -297,16 +308,16 @@ class _BookingScreenState extends State<BookingScreen> {
                     navigationController.navigateWithArg(checkout, {
                       'product': widget.product,
                       'bookedCount': bookedCount,
-                      'deliveryCharges': widget.product!.freeDelivery!
+                      'deliveryCharges': widget.product!.freeDelivery! ||
+                              widget.product!.officePickup! &&
+                                  officePickupSelected
                           ? 0.0
-                          : officePickup!
-                              ? widget.product!.officePickupRate
-                              : widget.product!.deliveryRates![value - 1].rate,
+                          : widget.product!.deliveryRates![value - 1].rate,
                       'deliveryType': widget.product!.freeDelivery!
                           ? 'Free Delivery'
-                          : officePickup!
+                          : officePickupSelected
                               ? 'Office Pickup'
-                              : '${widget.product!.deliveryRates![value - 1].city!.name}',
+                              : '${widget.product!.deliveryRates![value - 1].location}',
                     });
                   },
                   child: Text(
