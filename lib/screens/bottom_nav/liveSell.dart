@@ -6,7 +6,6 @@ import 'package:bullslot/widgets/productListing.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../constants/images.dart';
 import '../../controllers/productController.dart';
 import '../../models/deliveryRate.dart';
 import '../../models/location.dart';
@@ -46,6 +45,12 @@ class _LiveSellScreenState extends State<LiveSellScreen> {
           .where((element) => element.location == location)
           .toList();
     });
+  }
+
+  @override
+  void initState() {
+    filteredProductList = productController.liveProducts;
+    super.initState();
   }
 
   @override
@@ -184,12 +189,12 @@ class _LiveSellScreenState extends State<LiveSellScreen> {
                 shrinkWrap: true,
                 physics: const BouncingScrollPhysics(
                     parent: NeverScrollableScrollPhysics()),
-                itemCount: productController.liveProducts.length,
+                itemCount: filteredProductList.length,
                 itemBuilder: (context, index) {
                   return Container(
                     margin: const EdgeInsets.only(left: 20, right: 20, top: 20),
                     child: ProductListingWidget(
-                      product: productController.liveProducts[index],
+                      product: filteredProductList[index],
                     ),
                   );
                 }),

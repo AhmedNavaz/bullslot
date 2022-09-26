@@ -54,6 +54,8 @@ class RouteGenerator {
           bookedCount: args['bookedCount'] as int,
           deliveryCharges: args['deliveryCharges'] as double,
           deliveryType: args['deliveryType'] as String,
+          phone: args['phone'] as String,
+          address: args['address'] as String,
         ));
 
       case gallery:

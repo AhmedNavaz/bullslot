@@ -7,7 +7,8 @@ class Product {
   String? title;
   List<String>? images;
   DateTime? date;
-  int? totalPrice;
+  String? totalPrice;
+  String? description;
   String? location;
   String? category;
   bool? freeDelivery;
@@ -22,6 +23,7 @@ class Product {
     this.images,
     this.date,
     this.totalPrice,
+    this.description,
     this.location,
     this.category,
     this.freeDelivery,
@@ -37,6 +39,7 @@ class Product {
     images = json['images'].cast<String>();
     date = DateTime.parse(json['date']);
     totalPrice = json['totalPrice'];
+    description = json['description'];
     location = json['location'];
     category = json['category'];
     freeDelivery = json['freeDelivery'];
@@ -58,6 +61,7 @@ class Product {
     data['images'] = this.images;
     data['date'] = this.date!.toIso8601String();
     data['totalPrice'] = this.totalPrice;
+    data['description'] = this.description;
     data['location'] = this.location;
     data['category'] = this.category;
     data['freeDelivery'] = this.freeDelivery;

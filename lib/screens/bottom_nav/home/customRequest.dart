@@ -1,5 +1,8 @@
 import 'package:bullslot/constants/navigation.dart';
+import 'package:bullslot/controllers/authController.dart';
+import 'package:bullslot/services/database.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../constants/colors.dart';
 import '../../../widgets/formField.dart';
@@ -9,11 +12,14 @@ class CustomRequestScreen extends StatelessWidget {
 
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController nameController = TextEditingController();
+  TextEditingController slotController = TextEditingController();
 
   TextEditingController descriptionController = TextEditingController();
 
   TextEditingController phoneController = TextEditingController();
+
+  DatabaseMethods databaseMethods = DatabaseMethods();
+  AuthController authController = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {
@@ -44,9 +50,10 @@ class CustomRequestScreen extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodyText1),
                 ),
                 formField(
-                  title: 'Name',
-                  controller: nameController,
-                  hintText: 'Enter you name',
+                  title: 'Slots',
+                  controller: slotController,
+                  hintText: 'Enter ny number of slots',
+                  inputType: TextInputType.number,
                 ),
                 formField(
                   title: 'Contact',
@@ -54,15 +61,53 @@ class CustomRequestScreen extends StatelessWidget {
                   hintText: 'Enter your phone/whatsapp number',
                   inputType: TextInputType.number,
                 ),
-                formField(
-                  title: 'Description',
+                TextFormField(
                   controller: descriptionController,
-                  hintText: 'Explain your request briefly',
+                  maxLines: 10,
+                  style: Theme.of(context).textTheme.bodyText1,
+                  decoration: InputDecoration(
+                    hintText: 'Explain your request in detail',
+                    hintStyle: Theme.of(context)
+                        .textTheme
+                        .bodyText1!
+                        .copyWith(fontSize: 14, color: Colors.grey.shade500),
+                    enabledBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey),
+                    ),
+                    focusedBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black, width: 1.5),
+                    ),
+                    labelText: 'Description',
+                    labelStyle: Theme.of(context).textTheme.bodyText1,
+                  ),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'This field can\'t be empty';
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 30),
                 ElevatedButton(
                   onPressed: () {
-                    navigationController.goBack();
+                    if (_formKey.currentState!.validate()) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Sending your request...'),
+                        ),
+                      );
+                      databaseMethods
+                          .sendRequest(
+                        int.parse(slotController.text),
+                        authController.localUser.value.name!,
+                        authController.localUser.value.email!,
+                        descriptionController.text,
+                        phoneController.text,
+                      )
+                          .then((value) {
+                        navigationController.goBack();
+                      });
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: accentColor,

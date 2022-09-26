@@ -1,26 +1,21 @@
 import 'dart:async';
 
-import 'package:bullslot/constants/navigation.dart';
-import 'package:bullslot/models/product.dart';
-import 'package:bullslot/router/routerGenerator.dart';
-import 'package:bullslot/services/utils.dart';
+import 'package:bullslot/models/orderStatus.dart';
 import 'package:flutter/material.dart';
 
 import '../constants/colors.dart';
+import '../services/utils.dart';
 
-class ProductListingWidget extends StatefulWidget {
-  ProductListingWidget({
-    Key? key,
-    this.product,
-  }) : super(key: key);
+class OrderStatusWidget extends StatefulWidget {
+  OrderStatusWidget({super.key, this.orderStatus});
 
-  Product? product;
+  OrderStatus? orderStatus;
 
   @override
-  State<ProductListingWidget> createState() => _ProductListingWidgetState();
+  State<OrderStatusWidget> createState() => _OrderStatusWidgetState();
 }
 
-class _ProductListingWidgetState extends State<ProductListingWidget> {
+class _OrderStatusWidgetState extends State<OrderStatusWidget> {
   Utils utils = Utils();
   late String clock;
   late Timer clockSec;
@@ -50,12 +45,7 @@ class _ProductListingWidgetState extends State<ProductListingWidget> {
                 borderRadius: const BorderRadius.only(
                     topRight: Radius.circular(20),
                     topLeft: Radius.circular(20)),
-                child: Image.network(
-                  widget.product!.images![0],
-                  height: 200,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
+                child: Image.network(widget.orderStatus!.product!.images![0]),
               ),
               Container(
                 decoration: const BoxDecoration(
@@ -67,7 +57,7 @@ class _ProductListingWidgetState extends State<ProductListingWidget> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 child: Text(
-                  'Time: ${utils.getRemainingTime(widget.product!.date!)}',
+                  'Time: ${utils.getRemainingTime(widget.orderStatus!.product!.date!)}',
                   style: Theme.of(context)
                       .textTheme
                       .headline2!
@@ -86,7 +76,7 @@ class _ProductListingWidgetState extends State<ProductListingWidget> {
                   child: Row(
                     children: [
                       Text(
-                        '${widget.product!.title}',
+                        '${widget.orderStatus!.product!.title}',
                         style: Theme.of(context)
                             .textTheme
                             .bodyText1!
@@ -101,7 +91,7 @@ class _ProductListingWidgetState extends State<ProductListingWidget> {
                             size: 20,
                           ),
                           Text(
-                            widget.product!.location!,
+                            widget.orderStatus!.product!.location!,
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyText2!
@@ -115,16 +105,16 @@ class _ProductListingWidgetState extends State<ProductListingWidget> {
               ),
             ],
           ),
-          widget.product!.totalSlots != null
-              ? Container(
-                  color: primaryColor,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 7.5, horizontal: 15),
-                  child: Row(
+          Container(
+            color: primaryColor,
+            padding: const EdgeInsets.symmetric(vertical: 7.5, horizontal: 15),
+            width: double.infinity,
+            child: widget.orderStatus!.product!.totalSlots != null
+                ? Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Total Slots:   ${widget.product!.totalSlots}'
+                        'Total Slots:   ${widget.orderStatus!.product!.totalSlots}'
                             .split('.')[0],
                         style: Theme.of(context)
                             .textTheme
@@ -132,7 +122,53 @@ class _ProductListingWidgetState extends State<ProductListingWidget> {
                             .copyWith(color: Colors.white),
                       ),
                       Text(
-                        'Remaining Slots:   ${widget.product!.availableSlots}'
+                        'Remaining Slots:   ${widget.orderStatus!.product!.totalSlots! - widget.orderStatus!.product!.availableSlots!}'
+                            .split('.')[0],
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText2!
+                            .copyWith(color: Colors.white),
+                      )
+                    ],
+                  )
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Price',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText1!
+                            .copyWith(color: Colors.white),
+                      ),
+                      Text(
+                        '\$${widget.orderStatus!.product!.totalPrice}',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText1!
+                            .copyWith(color: Colors.white),
+                      ),
+                    ],
+                  ),
+          ),
+          widget.orderStatus!.product!.totalSlots != null
+              ? Container(
+                  color: secondaryColor,
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 7.5, horizontal: 15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Original Price: \$${widget.orderStatus!.product!.totalPrice}'
+                            .split('.')[0],
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText2!
+                            .copyWith(color: Colors.white),
+                      ),
+                      Text(
+                        'Slot Price: \$${double.parse(widget.orderStatus!.product!.totalPrice!) / widget.orderStatus!.product!.totalSlots!.toDouble()}'
                             .split('.')[0],
                         style: Theme.of(context)
                             .textTheme
@@ -143,101 +179,35 @@ class _ProductListingWidgetState extends State<ProductListingWidget> {
                   ),
                 )
               : Container(),
-          widget.product!.totalSlots != null
-              ? Container(
-                  color: secondaryColor,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 7.5, horizontal: 15),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Original Price: #${widget.product!.totalPrice}'
-                            .split('.')[0],
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText2!
-                            .copyWith(color: Colors.white),
-                      ),
-                      Text(
-                        'Slot Price: #${double.parse(widget.product!.totalPrice!) / widget.product!.totalSlots!.toDouble()}'
-                            .split('.')[0],
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText2!
-                            .copyWith(color: Colors.white),
-                      )
-                    ],
-                  ),
-                )
-              : Container(
-                  color: primaryColor,
-                  width: double.infinity,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 7.5, horizontal: 15),
-                  child: Row(
-                    children: [
-                      Text(
-                        'Price: ',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText2!
-                            .copyWith(color: Colors.white),
-                      ),
-                      const Spacer(),
-                      Text(
-                        '#${widget.product!.totalPrice}'.split('.')[0],
-                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 22),
-                      ),
-                    ],
-                  ),
-                ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  navigationController
-                      .navigateWithArg(booking, {'product': widget.product});
-                },
-                style: ElevatedButton.styleFrom(
-                    fixedSize: const Size(150, 30),
-                    backgroundColor: accentColor,
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(20)))),
+          Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  color: '${widget.orderStatus!.status}'.split('.')[1] ==
+                          'DELIVERED'
+                      ? Colors.black
+                      : '${widget.orderStatus!.status}'.split('.')[1] == 'PAID'
+                          ? accentColor
+                          : '${widget.orderStatus!.status}'.split('.')[1] ==
+                                  'REJECTED'
+                              ? Colors.red
+                              : '${widget.orderStatus!.status}'.split('.')[1] ==
+                                      'REFUNDED'
+                                  ? Colors.blueAccent
+                                  : Colors.grey,
+                  borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(20),
+                      bottomRight: Radius.circular(20))),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 7.5, horizontal: 15),
+              child: Center(
                 child: Text(
-                  widget.product!.totalSlots == null ? 'Buy Now' : 'Book Now',
+                  '${widget.orderStatus!.status}'.split('.')[1],
                   style: Theme.of(context)
                       .textTheme
                       .headline2!
-                      .copyWith(fontSize: 18),
+                      .copyWith(fontSize: 20),
                 ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  navigationController.navigateWithArg(
-                      productDetails, {'product': widget.product});
-                },
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    fixedSize: const Size(150, 30),
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                            bottomRight: Radius.circular(20)))),
-                child: Text(
-                  'View Details',
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline2!
-                      .copyWith(fontSize: 18),
-                ),
-              )
-            ],
-          )
+              )),
         ],
       ),
     );

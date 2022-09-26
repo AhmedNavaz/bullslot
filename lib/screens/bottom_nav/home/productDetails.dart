@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:bullslot/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -129,7 +128,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                     ),
                     const SizedBox(height: 15),
                     Text(
-                      'asldkfjasd sld;fkjs odflksdjf sad;fkljsadio fjsd;lfjksd;iofjasd;lfj as;ldfjasdofjasd;lkfjaweoifjsdlfjasdklfjas df;sdklfjsd;iofjoas;djfklasdjf;oisdjf;lsajga;lgjasiofj  sdf;iasdojfosjf a;l',
+                      widget.product!.description!,
                       style: Theme.of(context).textTheme.bodyText2,
                       textAlign: TextAlign.justify,
                     ),
@@ -182,9 +181,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   .copyWith(color: Colors.grey),
                             ),
                             Text(
-                              widget.product!.totalPrice!
-                                  .toDouble()
-                                  .toStringAsFixed(2),
+                              widget.product!.totalPrice!,
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyText1!
@@ -242,7 +239,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 : Container(),
                             widget.product!.totalSlots != null
                                 ? Text(
-                                    (widget.product!.totalPrice! /
+                                    (double.parse(widget.product!.totalPrice!) /
                                             widget.product!.totalSlots!)
                                         .toStringAsFixed(2),
                                     style: Theme.of(context)

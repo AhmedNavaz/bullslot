@@ -94,7 +94,7 @@ class ContactUsScreen extends StatelessWidget {
                         authController.localUser.value.email!,
                         titleController.text,
                         descriptionController.text,
-                        titleController.text,
+                        phoneController.text,
                       )
                           .then((value) {
                         navigationController.goBack();

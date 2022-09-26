@@ -1,9 +1,13 @@
+// ignore_for_file: unnecessary_brace_in_string_interps
+
 import 'dart:io';
 
 import 'package:bullslot/constants/colors.dart';
 import 'package:bullslot/constants/navigation.dart';
+import 'package:bullslot/controllers/orderController.dart';
 import 'package:bullslot/router/routerGenerator.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../../models/product.dart';
 import '../../../../widgets/formField.dart';
@@ -19,9 +23,7 @@ class BookingScreen extends StatefulWidget {
 
 class _BookingScreenState extends State<BookingScreen> {
   final _formKey = GlobalKey<FormState>();
-
   var officePickupSelected = false;
-
   var value;
 
   TextEditingController phoneController = TextEditingController();
@@ -30,15 +32,25 @@ class _BookingScreenState extends State<BookingScreen> {
   List<bool> bookedByYou = [];
   int bookedCount = 0;
 
+  OrderController orderController = Get.put(OrderController());
+
   @override
   void initState() {
-    for (int i = 0; i < widget.product!.totalSlots!; i++) {
-      if (i < widget.product!.availableSlots!.toInt()) {
-        bookedByYou.add(true);
-      } else {
-        bookedByYou.add(false);
+    if (widget.product!.totalSlots != null) {
+      for (int i = 0; i < widget.product!.totalSlots!; i++) {
+        if (i <
+            widget.product!.totalSlots! -
+                widget.product!.availableSlots!.toInt()) {
+          bookedByYou.add(true);
+        } else {
+          bookedByYou.add(false);
+        }
       }
     }
+    if (widget.product!.officePickup!) {
+      orderController.getOfficeAddress();
+    }
+
     super.initState();
   }
 
@@ -61,88 +73,102 @@ class _BookingScreenState extends State<BookingScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           child: Column(
             children: [
-              Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  'Book Slots',
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline2!
-                      .copyWith(color: Colors.black, fontSize: 22),
-                ),
-              ),
-              const SizedBox(height: 15),
-              Wrap(
-                children: [
-                  for (int i = 0; i < widget.product!.totalSlots!.toInt(); i++)
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          if (i >= widget.product!.availableSlots!.toInt()) {
-                            bookedByYou[i] = !bookedByYou[i];
-                            if (bookedByYou[i]) {
-                              bookedCount++;
-                            } else {
-                              bookedCount--;
-                            }
-                          }
-                        });
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 2.5),
-                        height: 50,
-                        width: 100,
-                        child: Card(
-                          elevation: 5,
-                          color: bookedByYou[i]
-                              ? i < widget.product!.availableSlots!.toInt()
-                                  ? Colors.red.shade600
-                                  : Colors.blueAccent
-                              : Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Center(
-                            child: Text(
-                              'Slot ${i + 1}',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText2!
-                                  .copyWith(
-                                      color: bookedByYou[i]
-                                          ? Colors.white
-                                          : Colors.black,
-                                      fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
+              widget.product!.totalSlots != null
+                  ? Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        'Book Slots',
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline2!
+                            .copyWith(color: Colors.black, fontSize: 22),
                       ),
                     )
-                ],
-              ),
-              const SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: Card(color: Colors.red.shade800),
-                    ),
-                    const Text('Booked Slots'),
-                    const Spacer(),
-                    const SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: Card(color: Colors.white),
-                    ),
-                    const Text('Available Slots'),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 15),
+                  : Container(),
+              SizedBox(height: widget.product!.totalSlots != null ? 15 : 0),
+              widget.product!.totalSlots != null
+                  ? Wrap(
+                      children: [
+                        for (int i = 0;
+                            i < widget.product!.totalSlots!.toInt();
+                            i++)
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                if (i >=
+                                    widget.product!.totalSlots! -
+                                        widget.product!.availableSlots!
+                                            .toInt()) {
+                                  bookedByYou[i] = !bookedByYou[i];
+                                  if (bookedByYou[i]) {
+                                    bookedCount++;
+                                  } else {
+                                    bookedCount--;
+                                  }
+                                }
+                              });
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 2.5),
+                              height: 50,
+                              width: 100,
+                              child: Card(
+                                elevation: 5,
+                                color: bookedByYou[i]
+                                    ? i <
+                                            widget.product!.totalSlots! -
+                                                widget.product!.availableSlots!
+                                                    .toInt()
+                                        ? Colors.red.shade600
+                                        : Colors.blueAccent
+                                    : Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'Slot ${i + 1}',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText2!
+                                        .copyWith(
+                                            color: bookedByYou[i]
+                                                ? Colors.white
+                                                : Colors.black,
+                                            fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                      ],
+                    )
+                  : Container(),
+              SizedBox(height: widget.product!.totalSlots != null ? 10 : 0),
+              widget.product!.totalSlots != null
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: Card(color: Colors.red.shade800),
+                          ),
+                          const Text('Booked Slots'),
+                          const Spacer(),
+                          const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: Card(color: Colors.white),
+                          ),
+                          const Text('Available Slots'),
+                        ],
+                      ),
+                    )
+                  : Container(),
+              SizedBox(height: widget.product!.totalSlots != null ? 15 : 0),
               Align(
                 alignment: Alignment.topLeft,
                 child: Text(
@@ -193,14 +219,15 @@ class _BookingScreenState extends State<BookingScreen> {
                         children: [
                           Text('Office Address',
                               style: Theme.of(context).textTheme.bodyText2),
-                          Text('420 Pennsylvania St. Jersey City, NJ 07302',
+                          Text(orderController.officeAddress.value,
                               style: Theme.of(context).textTheme.bodyText1),
                           const SizedBox(height: 10),
                         ],
                       ),
                     )
                   : Container(),
-              widget.product!.deliveryRates != null
+              widget.product!.deliveryRates != null &&
+                      widget.product!.deliveryRates!.isNotEmpty
                   ? Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -305,20 +332,36 @@ class _BookingScreenState extends State<BookingScreen> {
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () {
-                    navigationController.navigateWithArg(checkout, {
-                      'product': widget.product,
-                      'bookedCount': bookedCount,
-                      'deliveryCharges': widget.product!.freeDelivery! ||
-                              widget.product!.officePickup! &&
-                                  officePickupSelected
-                          ? 0.0
-                          : widget.product!.deliveryRates![value - 1].rate,
-                      'deliveryType': widget.product!.freeDelivery!
-                          ? 'Free Delivery'
-                          : officePickupSelected
-                              ? 'Office Pickup'
-                              : '${widget.product!.deliveryRates![value - 1].location}',
-                    });
+                    if (_formKey.currentState!.validate()) {
+                      if ((widget.product!.totalSlots != null &&
+                              bookedCount > 0) ||
+                          widget.product!.totalSlots == null) {
+                        navigationController.navigateWithArg(checkout, {
+                          'product': widget.product,
+                          'bookedCount': bookedCount,
+                          'deliveryCharges': widget.product!.freeDelivery! ||
+                                  widget.product!.officePickup! &&
+                                      officePickupSelected
+                              ? 0.0
+                              : double.parse(widget
+                                  .product!.deliveryRates![value - 1].rate!),
+                          'deliveryType': widget.product!.freeDelivery!
+                              ? 'Free Delivery'
+                              : officePickupSelected
+                                  ? 'Office Pickup'
+                                  : '${widget.product!.deliveryRates![value - 1].location}',
+                          'phone': phoneController.text,
+                          'address': addressController.text,
+                        });
+                      } else {
+                        // show snackbar
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Please select slot'),
+                          ),
+                        );
+                      }
+                    }
                   },
                   child: Text(
                     'Go to Checkout',

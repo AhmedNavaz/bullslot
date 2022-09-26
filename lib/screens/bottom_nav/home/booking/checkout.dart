@@ -1,50 +1,73 @@
 import 'dart:io';
 
 import 'package:bullslot/constants/colors.dart';
+import 'package:bullslot/constants/navigation.dart';
+import 'package:bullslot/controllers/authController.dart';
+import 'package:bullslot/controllers/orderController.dart';
 import 'package:bullslot/models/bankAccount.dart';
+import 'package:bullslot/models/orderStatus.dart';
+import 'package:bullslot/router/routerGenerator.dart';
+import 'package:bullslot/services/storage.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../../models/product.dart';
 import '../../../../services/utils.dart';
 
 class CheckoutScreen extends StatefulWidget {
-  CheckoutScreen(
-      {super.key,
-      this.product,
-      this.bookedCount,
-      this.deliveryCharges,
-      this.deliveryType});
+  CheckoutScreen({
+    super.key,
+    this.product,
+    this.bookedCount,
+    this.deliveryCharges,
+    this.deliveryType,
+    this.phone,
+    this.address,
+  });
 
   Product? product;
   int? bookedCount;
   double? deliveryCharges;
   String? deliveryType;
+  String? phone;
+  String? address;
 
   @override
   State<CheckoutScreen> createState() => _CheckoutScreenState();
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
-  List<BankAccount> bankAccounts = [
-    BankAccount(
-      id: '1',
-      accountName: 'Bullslot',
-      accountNumber: '1234567890',
-      bankName: 'HDFC',
-      bankAddress: 'Mumbai',
-      currency: 'INR',
-    ),
-    BankAccount(
-      id: '2',
-      accountName: 'Bullslot',
-      accountNumber: '1234567890',
-      bankName: 'HDFC',
-      bankAddress: 'Mumbai',
-      currency: 'INR',
-    ),
-  ];
+  OrderController orderController = Get.find<OrderController>();
+  AuthController authController = Get.find<AuthController>();
+
+  bool isLoading = true;
+
+  ImageHandler imageHandler = ImageHandler();
+  StorageMethods storageMethods = StorageMethods();
 
   File? proofImage;
+
+  @override
+  void initState() {
+    orderController.getBankAccounts().then((value) {
+      print(orderController.bankAccounts);
+      setState(() {
+        isLoading = false;
+      });
+    });
+    super.initState();
+  }
+
+  Future<String> uploadFile(String id) async {
+    if (proofImage == null) return '';
+    UploadTask? task =
+        storageMethods.uploadImage('paymentProofs/$id', proofImage!);
+    if (task == null) return '';
+    final snapshot = await task.whenComplete(() {});
+    return await snapshot.ref.getDownloadURL();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,233 +83,327 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         ),
         iconTheme: const IconThemeData(color: Colors.black),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          child: Column(
-            children: [
-              Container(
-                alignment: Alignment.bottomLeft,
-                padding: const EdgeInsets.only(left: 10),
-                child: Text(
-                  'Account Details',
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline2!
-                      .copyWith(color: Colors.black, fontSize: 26),
-                ),
-              ),
-              const SizedBox(height: 10),
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: bankAccounts.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    color: Colors.grey.shade200,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Account # ${index + 1}',
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator(color: primaryColor))
+          : Obx(
+              () => SingleChildScrollView(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  child: Column(
+                    children: [
+                      Container(
+                        alignment: Alignment.bottomLeft,
+                        padding: const EdgeInsets.only(left: 10),
+                        child: Text(
+                          'Account Details',
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline2!
+                              .copyWith(color: Colors.black, fontSize: 26),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: orderController.bankAccounts.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            color: Colors.grey.shade200,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Account # ${index + 1}',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .copyWith(fontWeight: FontWeight.bold)),
+                                const SizedBox(height: 5),
+                                Row(
+                                  children: [
+                                    Text('Account Name',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1),
+                                    const Spacer(),
+                                    Text(
+                                        orderController
+                                            .bankAccounts[index].accountName!,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Text('Bank Name',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1),
+                                    const Spacer(),
+                                    Text(
+                                        orderController
+                                            .bankAccounts[index].bankName!,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Text('Bank Address',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1),
+                                    const Spacer(),
+                                    Text(
+                                        orderController
+                                            .bankAccounts[index].bankAddress!,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Text('Account Number',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1),
+                                    const Spacer(),
+                                    Text(
+                                        orderController
+                                            .bankAccounts[index].accountNumber!,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Text('Currency',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1),
+                                    const Spacer(),
+                                    Text(
+                                        orderController
+                                            .bankAccounts[index].currency!,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 30),
+                      ListTile(
+                        leading: Text('Delivery Charges',
+                            style: Theme.of(context).textTheme.bodyText1),
+                        title: Text('(${widget.deliveryType})',
+                            style: Theme.of(context).textTheme.bodyText2),
+                        trailing: Text(
+                          '\$${widget.deliveryCharges?.toStringAsFixed(2)}',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText1!
+                              .copyWith(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      ListTile(
+                        title: Text(
+                            widget.product!.totalSlots == null
+                                ? 'Subtotal'
+                                : 'Subtotal (${widget.bookedCount.toString()}x slots)',
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyText1!
-                                .copyWith(fontWeight: FontWeight.bold)),
-                        const SizedBox(height: 5),
-                        Row(
-                          children: [
-                            Text('Account Name',
-                                style: Theme.of(context).textTheme.bodyText1),
-                            const Spacer(),
-                            Text(bankAccounts[index].accountName!,
-                                style: Theme.of(context).textTheme.bodyText1),
-                          ],
+                                .copyWith(fontSize: 18)),
+                        trailing: Text(
+                          widget.product!.totalSlots == null
+                              ? '\$${(double.parse(widget.product!.totalPrice!)).toStringAsFixed(2)}'
+                              : '\$${(double.parse(widget.product!.totalPrice!) / widget.product!.totalSlots! * widget.bookedCount!).toStringAsFixed(2)}',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText1!
+                              .copyWith(fontWeight: FontWeight.bold),
                         ),
-                        Row(
-                          children: [
-                            Text('Bank Name',
-                                style: Theme.of(context).textTheme.bodyText1),
-                            const Spacer(),
-                            Text(bankAccounts[index].bankName!,
-                                style: Theme.of(context).textTheme.bodyText1),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Text('Bank Address',
-                                style: Theme.of(context).textTheme.bodyText1),
-                            const Spacer(),
-                            Text(bankAccounts[index].bankAddress!,
-                                style: Theme.of(context).textTheme.bodyText1),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Text('Account Number',
-                                style: Theme.of(context).textTheme.bodyText1),
-                            const Spacer(),
-                            Text(bankAccounts[index].accountNumber!,
-                                style: Theme.of(context).textTheme.bodyText1),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Text('Currency',
-                                style: Theme.of(context).textTheme.bodyText1),
-                            const Spacer(),
-                            Text(bankAccounts[index].currency!,
-                                style: Theme.of(context).textTheme.bodyText1),
-                          ],
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-              const SizedBox(height: 30),
-              ListTile(
-                leading: Text('Delivery Charges',
-                    style: Theme.of(context).textTheme.bodyText1),
-                title: Text('(${widget.deliveryType})',
-                    style: Theme.of(context).textTheme.bodyText2),
-                trailing: Text(
-                  '\$${widget.deliveryCharges?.toStringAsFixed(2)}',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText1!
-                      .copyWith(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ),
-              ListTile(
-                title: Text(
-                    'Subtotal (${widget.bookedCount.toString()}x slots)',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .copyWith(fontSize: 18)),
-                trailing: Text(
-                  '\$${widget.product!.totalPrice! / widget.product!.totalSlots! * widget.bookedCount!}',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText1!
-                      .copyWith(fontWeight: FontWeight.bold),
-                ),
-              ),
-              Divider(
-                height: 0,
-                indent: 10,
-                endIndent: 10,
-                color: Colors.grey.shade400,
-              ),
-              ListTile(
-                title:
-                    Text('Total', style: Theme.of(context).textTheme.bodyText1),
-                trailing: Text(
-                  '\$${widget.product!.totalPrice! / widget.product!.totalSlots! * widget.bookedCount! + widget.deliveryCharges!}',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText1!
-                      .copyWith(fontWeight: FontWeight.bold),
-                ),
-              ),
-              ListTile(
-                title: Text(
-                  'Upload Payment Proof',
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline2!
-                      .copyWith(color: Colors.black, fontSize: 20),
-                ),
-                trailing: IconButton(
-                  icon: const Icon(Icons.image_outlined, color: primaryColor),
-                  onPressed: () {
-                    ImageHandler.uploadPicture()!.then((value) {
-                      value.path == ''
-                          ? null
-                          : setState(() {
-                              proofImage = value;
-                            });
-                    });
-                  },
-                ),
-              ),
-              Container(
-                width: double.infinity,
-                height: 300,
-                decoration: BoxDecoration(
-                  border: Border.all(width: 1, color: Colors.grey),
-                ),
-                alignment: Alignment.center,
-                child: proofImage == null
-                    ? Text(
-                        'No Image Added Yet',
-                        style: Theme.of(context).textTheme.bodyText2,
-                      )
-                    : Image.file(
-                        proofImage!,
-                        fit: BoxFit.cover,
-                        width: double.infinity,
                       ),
-              ),
-              const SizedBox(height: 15),
-              Text(
-                'Pay the above amount in one of our bank accounts and upload the payment proof, then tap the below button.',
-                style: Theme.of(context).textTheme.bodyText2,
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (proofImage != null) {
-                      // show dialog
-                      showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (context) => AlertDialog(
-                          content: Text(
-                            'Your payment is pending awaiting verification.',
-                            style: Theme.of(context).textTheme.bodyText1,
+                      Divider(
+                        height: 0,
+                        indent: 10,
+                        endIndent: 10,
+                        color: Colors.grey.shade400,
+                      ),
+                      ListTile(
+                        title: Text('Total',
+                            style: Theme.of(context).textTheme.bodyText1),
+                        trailing: Text(
+                          widget.product!.totalSlots == null
+                              ? '\$${(double.parse(widget.product!.totalPrice!) + widget.deliveryCharges!).toStringAsFixed(2)}'
+                              : '\$${(double.parse(widget.product!.totalPrice!) / widget.product!.totalSlots! * widget.bookedCount! + widget.deliveryCharges!).toStringAsFixed(2)}',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText1!
+                              .copyWith(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      ListTile(
+                        title: Text(
+                          'Payment Proof',
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline2!
+                              .copyWith(color: Colors.black, fontSize: 20),
+                        ),
+                        trailing: ElevatedButton(
+                          onPressed: () {
+                            ImageHandler.uploadPicture()!.then((value) {
+                              value.path == ''
+                                  ? null
+                                  : setState(() {
+                                      proofImage = value;
+                                    });
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: primaryColor),
+                          child: Text(
+                            'Upload',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText2!
+                                .copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
                           ),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                                // navigate to home
-                                Navigator.pushNamedAndRemoveUntil(
-                                    context, '/', (route) => false);
-                              },
-                              child: Text('Ok',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .copyWith(color: primaryColor)),
-                            ),
-                          ],
                         ),
-                      );
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Please upload payment proof'),
+                      ),
+                      Container(
+                        width: double.infinity,
+                        height: 300,
+                        decoration: BoxDecoration(
+                          border: Border.all(width: 1, color: Colors.grey),
                         ),
-                      );
-                    }
-                  },
-                  child: Text(
-                    'I\'ve Paid',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .copyWith(color: Colors.white),
+                        alignment: Alignment.center,
+                        child: proofImage == null
+                            ? Text(
+                                'No Image Added Yet',
+                                style: Theme.of(context).textTheme.bodyText2,
+                              )
+                            : Image.file(
+                                proofImage!,
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                              ),
+                      ),
+                      const SizedBox(height: 15),
+                      Text(
+                        'Pay the above amount in one of our bank accounts and upload the payment proof, then tap the below button.',
+                        style: Theme.of(context).textTheme.bodyText2,
+                      ),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (proofImage != null) {
+                              String id = const Uuid().v1();
+                              uploadFile(id).then((value) {
+                                orderController
+                                    .sendOrder(
+                                        authController.localUser.value.id!,
+                                        OrderStatus(
+                                          id: id,
+                                          product: widget.product,
+                                          status: Status.PENDING,
+                                          date: DateTime.now(),
+                                          slots: widget.bookedCount,
+                                          deliveryCharges: widget
+                                              .deliveryCharges!
+                                              .toStringAsFixed(2),
+                                          imageProof: value,
+                                          bill: widget.product!.totalSlots ==
+                                                  null
+                                              ? (double.parse(
+                                                          widget.product!
+                                                              .totalPrice!) +
+                                                      widget.deliveryCharges!)
+                                                  .toStringAsFixed(2)
+                                              : (double.parse(
+                                                              widget.product!
+                                                                  .totalPrice!) /
+                                                          widget.product!
+                                                              .totalSlots! *
+                                                          widget.bookedCount! +
+                                                      widget.deliveryCharges!)
+                                                  .toStringAsFixed(2),
+                                          name: authController
+                                              .localUser.value.name,
+                                          email: authController
+                                              .localUser.value.email,
+                                          phone: widget.phone,
+                                          address: widget.address,
+                                          deliveryType: widget.deliveryType,
+                                        ))
+                                    .then((value) {
+                                  showDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: (context) => AlertDialog(
+                                      content: Text(
+                                        'Your payment is pending awaiting verification.',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1,
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                            navigationController
+                                                .navigateTo(root);
+                                          },
+                                          child: Text('Ok',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText1!
+                                                  .copyWith(
+                                                      color: primaryColor)),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                });
+                              });
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Please upload payment proof'),
+                                ),
+                              );
+                            }
+                          },
+                          child: Text(
+                            'I\'ve Paid',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText1!
+                                .copyWith(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 }

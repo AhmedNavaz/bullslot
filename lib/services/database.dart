@@ -1,6 +1,9 @@
+import 'package:bullslot/controllers/authController.dart';
+import 'package:bullslot/models/orderStatus.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
+import '../models/bankAccount.dart';
 import '../models/category.dart';
 import '../models/deliveryRate.dart';
 import '../models/image.dart';
@@ -144,6 +147,74 @@ class DatabaseMethods extends GetxController {
         'timestamp': DateTime.now().millisecondsSinceEpoch,
         'isRead': false,
       });
+    } catch (e) {
+      print(e.toString());
+      rethrow;
+    }
+  }
+
+  // send request
+  Future<void> sendRequest(int slot, String name, String email,
+      String description, String phone) async {
+    try {
+      await FirebaseFirestore.instance.collection('requests').add({
+        'slot': slot,
+        'name': name,
+        'email': email,
+        'description': description,
+        'phone': phone,
+        'timestamp': DateTime.now().millisecondsSinceEpoch,
+        'isRead': false,
+      });
+    } catch (e) {
+      print(e.toString());
+      rethrow;
+    }
+  }
+
+  // get bank accounts
+  Future<List<BankAccount>> getBankAccounts() async {
+    try {
+      final bankAccounts = await FirebaseFirestore.instance
+          .collection('bankAccounts')
+          .orderBy('accountName')
+          .get();
+      return bankAccounts.docs
+          .map((e) => BankAccount.fromJson(e.data() as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      print(e.toString());
+      rethrow;
+    }
+  }
+
+  // add order
+  Future<void> addOrder(String userId, OrderStatus order) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection("ordersHistory")
+          .doc(order.id)
+          .set(order.toJson());
+      await FirebaseFirestore.instance
+          .collection('orders')
+          .doc(order.id)
+          .set(order.toJson());
+    } catch (e) {
+      print(e.toString());
+      rethrow;
+    }
+  }
+
+  // get office address
+  Future<String> getOfficeAddress() async {
+    try {
+      final officeAddress = await FirebaseFirestore.instance
+          .collection('officeAddress')
+          .doc('officeAddress')
+          .get();
+      return officeAddress.data()!['address'];
     } catch (e) {
       print(e.toString());
       rethrow;

@@ -4,7 +4,7 @@ class DeliveryRate {
   String? id;
   String? location;
   DeliveryType? type;
-  int? rate;
+  String? rate;
 
   DeliveryRate({this.id, this.location, this.type, this.rate});
 

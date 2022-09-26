@@ -13,7 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
-import '../../constants/images.dart';
 import '../../controllers/imagesController.dart';
 import '../../models/city.dart';
 import '../../models/deliveryRate.dart';
