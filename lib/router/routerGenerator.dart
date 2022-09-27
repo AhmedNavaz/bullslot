@@ -1,4 +1,5 @@
 import 'package:bullslot/screens/authentication/forgot.dart';
+import 'package:bullslot/screens/bottom_nav/home.dart';
 import 'package:bullslot/screens/bottom_nav/home/booking/booking.dart';
 import 'package:bullslot/screens/bottom_nav/home/customRequest.dart';
 import 'package:bullslot/screens/bottom_nav/home/deliverRates.dart';
@@ -12,6 +13,7 @@ import '../screens/contactUs.dart';
 import '../screens/gallery.dart';
 
 const String root = '/';
+const String home = 'home';
 const String forgotPassword = 'forgot-password';
 const String productDetails = 'product-details';
 const String deliveryRates = 'delivery-rates';
@@ -30,6 +32,9 @@ class RouteGenerator {
     switch (settings.name) {
       case root:
         return _getPageRoute(const Root());
+
+      case home:
+        return _getPageRoute(const HomeScreen());
 
       case forgotPassword:
         return _getPageRoute(const ForgotPasswordScreen());

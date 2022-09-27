@@ -43,6 +43,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   AuthController authController = Get.find<AuthController>();
 
   bool isLoading = true;
+  bool isUploading = false;
 
   ImageHandler imageHandler = ImageHandler();
   StorageMethods storageMethods = StorageMethods();
@@ -52,7 +53,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   @override
   void initState() {
     orderController.getBankAccounts().then((value) {
-      print(orderController.bankAccounts);
       setState(() {
         isLoading = false;
       });
@@ -314,14 +314,40 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         child: ElevatedButton(
                           onPressed: () {
                             if (proofImage != null) {
+                              setState(() {
+                                isUploading = true;
+                              });
                               String id = const Uuid().v1();
+
                               uploadFile(id).then((value) {
                                 orderController
                                     .sendOrder(
                                         authController.localUser.value.id!,
                                         OrderStatus(
                                           id: id,
-                                          product: widget.product,
+                                          product: Product(
+                                            id: widget.product!.id,
+                                            title: widget.product!.title,
+                                            images: widget.product!.images,
+                                            date: widget.product!.date,
+                                            totalPrice:
+                                                widget.product!.totalPrice,
+                                            description:
+                                                widget.product!.description,
+                                            location: widget.product!.location,
+                                            category: widget.product!.category,
+                                            freeDelivery:
+                                                widget.product!.freeDelivery,
+                                            deliveryRates:
+                                                widget.product!.deliveryRates,
+                                            officePickup:
+                                                widget.product!.officePickup,
+                                            totalSlots:
+                                                widget.product!.totalSlots,
+                                            availableSlots: widget
+                                                    .product!.availableSlots! -
+                                                widget.bookedCount!,
+                                          ),
                                           status: Status.PENDING,
                                           date: DateTime.now(),
                                           slots: widget.bookedCount,
@@ -353,6 +379,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                           deliveryType: widget.deliveryType,
                                         ))
                                     .then((value) {
+                                  orderController.updateAvailableSlots(
+                                      widget.product!.id!,
+                                      widget.product!.availableSlots! -
+                                          widget.bookedCount!);
                                   showDialog(
                                     context: context,
                                     barrierDismissible: false,
@@ -366,9 +396,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                       actions: [
                                         TextButton(
                                           onPressed: () {
-                                            Navigator.pop(context);
                                             navigationController
-                                                .navigateTo(root);
+                                                .navigateTo(home);
                                           },
                                           child: Text('Ok',
                                               style: Theme.of(context)
@@ -390,6 +419,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               );
                             }
                           },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                isUploading ? Colors.grey : accentColor,
+                          ),
                           child: Text(
                             'I\'ve Paid',
                             style: Theme.of(context)

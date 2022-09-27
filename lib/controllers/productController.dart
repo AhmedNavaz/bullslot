@@ -16,10 +16,12 @@ class ProductController extends GetxController {
         products.clear();
         liveProducts.clear();
         value.map((e) {
-          if (e.totalSlots == null) {
-            liveProducts.add(e);
-          } else {
-            products.add(e);
+          if (e.date!.isAfter(DateTime.now())) {
+            if (e.totalSlots == null) {
+              liveProducts.add(e);
+            } else {
+              products.add(e);
+            }
           }
         }).toList();
       });

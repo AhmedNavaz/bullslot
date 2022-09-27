@@ -2,6 +2,7 @@ import 'package:bullslot/controllers/authController.dart';
 import 'package:bullslot/models/orderStatus.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:uuid/uuid.dart';
 
 import '../models/bankAccount.dart';
 import '../models/category.dart';
@@ -139,6 +140,7 @@ class DatabaseMethods extends GetxController {
       String description, String phone) async {
     try {
       await FirebaseFirestore.instance.collection('messages').add({
+        'id': Uuid().v1(),
         'name': name,
         'email': email,
         'title': title,
@@ -158,6 +160,7 @@ class DatabaseMethods extends GetxController {
       String description, String phone) async {
     try {
       await FirebaseFirestore.instance.collection('requests').add({
+        'id': Uuid().v1(),
         'slot': slot,
         'name': name,
         'email': email,
@@ -215,6 +218,19 @@ class DatabaseMethods extends GetxController {
           .doc('officeAddress')
           .get();
       return officeAddress.data()!['address'];
+    } catch (e) {
+      print(e.toString());
+      rethrow;
+    }
+  }
+
+  // update available slots
+  Future<void> updateAvailableSlots(String id, int slot) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('products')
+          .doc(id)
+          .update({'availableSlots': slot});
     } catch (e) {
       print(e.toString());
       rethrow;

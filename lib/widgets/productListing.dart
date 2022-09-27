@@ -152,7 +152,7 @@ class _ProductListingWidgetState extends State<ProductListingWidget> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Original Price: #${widget.product!.totalPrice}'
+                        'Original Price: \$${widget.product!.totalPrice}'
                             .split('.')[0],
                         style: Theme.of(context)
                             .textTheme
@@ -160,7 +160,7 @@ class _ProductListingWidgetState extends State<ProductListingWidget> {
                             .copyWith(color: Colors.white),
                       ),
                       Text(
-                        'Slot Price: #${double.parse(widget.product!.totalPrice!) / widget.product!.totalSlots!.toDouble()}'
+                        'Slot Price: \$${double.parse(widget.product!.totalPrice!) / widget.product!.totalSlots!.toDouble()}'
                             .split('.')[0],
                         style: Theme.of(context)
                             .textTheme
@@ -186,7 +186,7 @@ class _ProductListingWidgetState extends State<ProductListingWidget> {
                       ),
                       const Spacer(),
                       Text(
-                        '#${widget.product!.totalPrice}'.split('.')[0],
+                        '\$${widget.product!.totalPrice}'.split('.')[0],
                         style: Theme.of(context).textTheme.bodyText1!.copyWith(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,

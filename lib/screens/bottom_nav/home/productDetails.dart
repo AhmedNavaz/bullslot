@@ -181,7 +181,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   .copyWith(color: Colors.grey),
                             ),
                             Text(
-                              widget.product!.totalPrice!,
+                              '\$${widget.product!.totalPrice!}',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyText1!
@@ -239,9 +239,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 : Container(),
                             widget.product!.totalSlots != null
                                 ? Text(
-                                    (double.parse(widget.product!.totalPrice!) /
-                                            widget.product!.totalSlots!)
-                                        .toStringAsFixed(2),
+                                    '\$${(double.parse(widget.product!.totalPrice!) / widget.product!.totalSlots!).toStringAsFixed(2)}',
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyText1!

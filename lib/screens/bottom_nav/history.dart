@@ -20,6 +20,7 @@ class HistoryScreen extends StatelessWidget {
             .collection('users')
             .doc(authController.localUser.value.id)
             .collection('ordersHistory')
+            .orderBy('date', descending: true)
             .snapshots(),
         builder: (context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {

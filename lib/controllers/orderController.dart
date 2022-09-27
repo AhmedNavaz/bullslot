@@ -41,4 +41,14 @@ class OrderController extends GetxController {
       rethrow;
     }
   }
+
+  // update available slots
+  Future<void> updateAvailableSlots(String id, int slot) async {
+    try {
+      await databaseMethods.updateAvailableSlots(id, slot);
+    } catch (e) {
+      print(e.toString());
+      rethrow;
+    }
+  }
 }

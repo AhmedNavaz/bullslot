@@ -12,7 +12,8 @@ class CategoryController extends GetxController {
   Future<void> getCategories() async {
     try {
       await databaseMethods.getCategories().then((value) {
-        categoriesList.assignAll(value);
+        categoriesList.add(Category('', 'All'));
+        categoriesList.addAll(value);
       });
     } catch (e) {
       print(e.toString());

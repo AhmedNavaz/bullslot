@@ -24,27 +24,29 @@ class _LiveSellScreenState extends State<LiveSellScreen> {
   LocationController locationController = Get.find<LocationController>();
   Location? dropdownvalue;
 
-  int categoryIndex = -1;
+  int categoryIndex = 0;
 
   String? _selectedLocation = 'All';
   List<dynamic> filteredProductList = [];
 
-  // filter with category
-  void filterCategory(String category) {
-    setState(() {
-      filteredProductList = productController.liveProducts
-          .where((element) => element.category == category)
-          .toList();
-    });
-  }
-
-  // filter with location
-  void filterLocation(String location) {
-    setState(() {
+  void filterProducts(String category, String location) {
+    if (category == 'All' && location == 'All') {
+      filteredProductList = productController.liveProducts;
+    } else if (category == 'All' && location != 'All') {
       filteredProductList = productController.liveProducts
           .where((element) => element.location == location)
           .toList();
-    });
+    } else if (category != 'All' && location == 'All') {
+      filteredProductList = productController.liveProducts
+          .where((element) => element.category == category)
+          .toList();
+    } else {
+      filteredProductList = productController.liveProducts
+          .where((element) =>
+              element.category == category && element.location == location)
+          .toList();
+    }
+    setState(() {});
   }
 
   @override
@@ -80,22 +82,17 @@ class _LiveSellScreenState extends State<LiveSellScreen> {
                     scrollDirection: Axis.horizontal,
                     physics: const BouncingScrollPhysics(
                         parent: AlwaysScrollableScrollPhysics()),
-                    itemCount: categoryController.categoriesList.length + 1,
+                    itemCount: categoryController.categoriesList.length,
                     itemBuilder: (context, index) {
                       return GestureDetector(
                         onTap: () {
                           setState(() {
                             categoryIndex = index;
                           });
-                          if (index == 0) {
-                            setState(() {
-                              filteredProductList =
-                                  productController.liveProducts;
-                            });
-                          } else {
-                            filterCategory(categoryController
-                                .categoriesList[index - 1].name);
-                          }
+                          filterProducts(
+                              categoryController
+                                  .categoriesList[categoryIndex].name,
+                              _selectedLocation!);
                         },
                         child: Container(
                           margin: const EdgeInsets.only(left: 15),
@@ -114,10 +111,7 @@ class _LiveSellScreenState extends State<LiveSellScreen> {
                               )),
                           child: Center(
                             child: Text(
-                              index == 0
-                                  ? 'All'
-                                  : categoryController
-                                      .categoriesList[index - 1].name,
+                              categoryController.categoriesList[index].name,
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyText2!
@@ -160,13 +154,9 @@ class _LiveSellScreenState extends State<LiveSellScreen> {
                   setState(() {
                     _selectedLocation = value.toString();
                   });
-                  if (_selectedLocation == 'All') {
-                    setState(() {
-                      filteredProductList = productController.liveProducts;
-                    });
-                  } else {
-                    filterLocation(_selectedLocation!);
-                  }
+                  filterProducts(
+                      categoryController.categoriesList[categoryIndex].name,
+                      _selectedLocation!);
                 },
               ),
             ],
