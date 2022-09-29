@@ -325,29 +325,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         authController.localUser.value.id!,
                                         OrderStatus(
                                           id: id,
-                                          product: Product(
-                                            id: widget.product!.id,
-                                            title: widget.product!.title,
-                                            images: widget.product!.images,
-                                            date: widget.product!.date,
-                                            totalPrice:
-                                                widget.product!.totalPrice,
-                                            description:
-                                                widget.product!.description,
-                                            location: widget.product!.location,
-                                            category: widget.product!.category,
-                                            freeDelivery:
-                                                widget.product!.freeDelivery,
-                                            deliveryRates:
-                                                widget.product!.deliveryRates,
-                                            officePickup:
-                                                widget.product!.officePickup,
-                                            totalSlots:
-                                                widget.product!.totalSlots,
-                                            availableSlots: widget
-                                                    .product!.availableSlots! -
-                                                widget.bookedCount!,
-                                          ),
+                                          productId: widget.product!.id!,
                                           status: Status.PENDING,
                                           date: DateTime.now(),
                                           slots: widget.bookedCount,
@@ -397,7 +375,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         TextButton(
                                           onPressed: () {
                                             navigationController
-                                                .navigateTo(home);
+                                                .getOffAll(home);
                                           },
                                           child: Text('Ok',
                                               style: Theme.of(context)

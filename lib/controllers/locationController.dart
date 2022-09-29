@@ -12,6 +12,7 @@ class LocationController extends GetxController {
   Future<void> getLocations() async {
     try {
       await databaseMethods.getLocations().then((value) {
+        locationsList.clear();
         locationsList.add('All');
         for (var element in value) {
           locationsList.add(element.name);

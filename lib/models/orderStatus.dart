@@ -4,7 +4,7 @@ enum Status { PENDING, PAID, DELIVERED, REJECTED, REFUNDED }
 
 class OrderStatus {
   String? id;
-  Product? product;
+  String? productId;
   Status? status;
   DateTime? date;
   int? slots;
@@ -19,7 +19,7 @@ class OrderStatus {
 
   OrderStatus({
     this.id,
-    this.product,
+    this.productId,
     this.status,
     this.date,
     this.slots,
@@ -35,9 +35,7 @@ class OrderStatus {
 
   OrderStatus.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    product = json['product'] != null
-        ? new Product.fromJson(json['product'] as Map<String, dynamic>)
-        : null;
+    productId = json['productId'];
     status =
         json['status'] != null ? Status.values[json['status'] as int] : null;
     date = json['date'] != null ? DateTime.parse(json['date'] as String) : null;
@@ -55,9 +53,7 @@ class OrderStatus {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    if (this.product != null) {
-      data['product'] = this.product!.toJson();
-    }
+    data['productId'] = this.productId;
     if (this.status != null) {
       data['status'] = this.status!.index;
     }
@@ -66,6 +62,7 @@ class OrderStatus {
     }
     data['slots'] = this.slots;
     data['deliveryCharges'] = this.deliveryCharges;
+    data['deliveryType'] = this.deliveryType;
     data['imageProof'] = this.imageProof;
     data['bill'] = this.bill;
     data['name'] = this.name;

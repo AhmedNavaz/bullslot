@@ -1,7 +1,10 @@
 import 'dart:async';
 
+import 'package:bullslot/controllers/productController.dart';
 import 'package:bullslot/models/orderStatus.dart';
+import 'package:bullslot/models/product.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../constants/colors.dart';
 import '../services/utils.dart';
@@ -20,8 +23,17 @@ class _OrderStatusWidgetState extends State<OrderStatusWidget> {
   late String clock;
   late Timer clockSec;
 
+  ProductController productController = Get.find<ProductController>();
+
+  Product? product;
+
   @override
   void initState() {
+    for (var element in productController.products) {
+      if (element.id == widget.orderStatus!.productId) {
+        product = element;
+      }
+    }
     super.initState();
 
     clock = DateTime.now().second.toString();
@@ -45,7 +57,7 @@ class _OrderStatusWidgetState extends State<OrderStatusWidget> {
                 borderRadius: const BorderRadius.only(
                     topRight: Radius.circular(20),
                     topLeft: Radius.circular(20)),
-                child: Image.network(widget.orderStatus!.product!.images![0]),
+                child: Image.network(product!.images![0]),
               ),
               Container(
                 decoration: const BoxDecoration(
@@ -57,7 +69,7 @@ class _OrderStatusWidgetState extends State<OrderStatusWidget> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 child: Text(
-                  'Time: ${utils.getRemainingTime(widget.orderStatus!.product!.date!)}',
+                  'Time: ${utils.getRemainingTime(product!.date!)}',
                   style: Theme.of(context)
                       .textTheme
                       .headline2!
@@ -76,7 +88,7 @@ class _OrderStatusWidgetState extends State<OrderStatusWidget> {
                   child: Row(
                     children: [
                       Text(
-                        '${widget.orderStatus!.product!.title}',
+                        '${product!.title}',
                         style: Theme.of(context)
                             .textTheme
                             .bodyText1!
@@ -91,7 +103,7 @@ class _OrderStatusWidgetState extends State<OrderStatusWidget> {
                             size: 20,
                           ),
                           Text(
-                            widget.orderStatus!.product!.location!,
+                            product!.location!,
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyText2!
@@ -109,20 +121,19 @@ class _OrderStatusWidgetState extends State<OrderStatusWidget> {
             color: primaryColor,
             padding: const EdgeInsets.symmetric(vertical: 7.5, horizontal: 15),
             width: double.infinity,
-            child: widget.orderStatus!.product!.totalSlots != null
+            child: product!.totalSlots != null
                 ? Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Total Slots:   ${widget.orderStatus!.product!.totalSlots}'
-                            .split('.')[0],
+                        'Total Slots:   ${product!.totalSlots}'.split('.')[0],
                         style: Theme.of(context)
                             .textTheme
                             .bodyText2!
                             .copyWith(color: Colors.white),
                       ),
                       Text(
-                        'Remaining Slots:   ${widget.orderStatus!.product!.totalSlots! - widget.orderStatus!.product!.availableSlots!}'
+                        'Remaining Slots:   ${product!.totalSlots! - product!.availableSlots!}'
                             .split('.')[0],
                         style: Theme.of(context)
                             .textTheme
@@ -142,7 +153,7 @@ class _OrderStatusWidgetState extends State<OrderStatusWidget> {
                             .copyWith(color: Colors.white),
                       ),
                       Text(
-                        '\$${widget.orderStatus!.product!.totalPrice}',
+                        '\$${product!.totalPrice}',
                         style: Theme.of(context)
                             .textTheme
                             .bodyText1!
@@ -151,7 +162,7 @@ class _OrderStatusWidgetState extends State<OrderStatusWidget> {
                     ],
                   ),
           ),
-          widget.orderStatus!.product!.totalSlots != null
+          product!.totalSlots != null
               ? Container(
                   color: secondaryColor,
                   padding:
@@ -160,7 +171,7 @@ class _OrderStatusWidgetState extends State<OrderStatusWidget> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Original Price: \$${widget.orderStatus!.product!.totalPrice}'
+                        'Original Price: \$${product!.totalPrice}'
                             .split('.')[0],
                         style: Theme.of(context)
                             .textTheme
@@ -168,7 +179,7 @@ class _OrderStatusWidgetState extends State<OrderStatusWidget> {
                             .copyWith(color: Colors.white),
                       ),
                       Text(
-                        'Slot Price: \$${double.parse(widget.orderStatus!.product!.totalPrice!) / widget.orderStatus!.product!.totalSlots!.toDouble()}'
+                        'Slot Price: \$${double.parse(product!.totalPrice!) / product!.totalSlots!.toDouble()}'
                             .split('.')[0],
                         style: Theme.of(context)
                             .textTheme

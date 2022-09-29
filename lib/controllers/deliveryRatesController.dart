@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 
-import '../models/deliveryRate.dart';
 import '../services/database.dart';
 
 class DeliveryRatesController extends GetxController {

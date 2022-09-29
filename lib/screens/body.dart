@@ -76,6 +76,13 @@ class _BottomNavBarState extends State<BottomNavBar> {
                     ),
                   ),
                   ListTile(
+                    leading: const Icon(Icons.person_outline),
+                    title: const Text('Edit Profile'),
+                    onTap: () {
+                      navigationController.navigateTo(editProfile);
+                    },
+                  ),
+                  ListTile(
                     leading: const Icon(Icons.contact_mail_outlined),
                     title: const Text('Contact Us'),
                     onTap: () {

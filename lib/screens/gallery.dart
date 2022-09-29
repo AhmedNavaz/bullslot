@@ -1,5 +1,7 @@
 import 'package:bullslot/constants/colors.dart';
+import 'package:bullslot/constants/navigation.dart';
 import 'package:bullslot/controllers/imagesController.dart';
+import 'package:bullslot/router/routerGenerator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -44,8 +46,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
         child: isLoading
             ? const Center(
                 child: CircularProgressIndicator(color: primaryColor))
-            : Obx(
-                () => GridView.builder(
+            : Obx(() => GridView.builder(
                   physics: const BouncingScrollPhysics(),
                   itemCount: imagesController.galleryImages.length,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -55,17 +56,39 @@ class _GalleryScreenState extends State<GalleryScreen> {
                     childAspectRatio: 1,
                   ),
                   itemBuilder: (context, index) {
-                    return ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Image.network(
-                        imagesController.galleryImages[index].url,
-                        fit: BoxFit.cover,
+                    return InkWell(
+                      onTap: () {
+                        navigationController.navigateWithArg(imageView,
+                            {'url': imagesController.galleryImages[index].url});
+                      },
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image.network(
+                          imagesController.galleryImages[index].url,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     );
                   },
-                ),
-              ),
+                )),
       ),
+    );
+  }
+}
+
+class ImageView extends StatelessWidget {
+  ImageView({super.key, this.image});
+
+  String? image;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+      ),
+      body: Center(child: Image.network(image!)),
     );
   }
 }

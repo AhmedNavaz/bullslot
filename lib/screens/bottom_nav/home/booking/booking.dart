@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:bullslot/constants/colors.dart';
 import 'package:bullslot/constants/navigation.dart';
+import 'package:bullslot/controllers/authController.dart';
 import 'package:bullslot/controllers/orderController.dart';
 import 'package:bullslot/router/routerGenerator.dart';
 import 'package:flutter/material.dart';
@@ -33,9 +34,12 @@ class _BookingScreenState extends State<BookingScreen> {
   int bookedCount = 0;
 
   OrderController orderController = Get.put(OrderController());
+  AuthController authController = Get.find<AuthController>();
 
   @override
   void initState() {
+    phoneController.text = authController.localUser.value.phone!;
+    addressController.text = authController.localUser.value.address!;
     if (widget.product!.totalSlots != null) {
       for (int i = 0; i < widget.product!.totalSlots!; i++) {
         if (i <
@@ -295,6 +299,12 @@ class _BookingScreenState extends State<BookingScreen> {
                             controller: addressController,
                             hintText: 'Enter your shipping address',
                           ),
+                    Text(
+                        'To save/edit your details permanently, go to "Edit Profile".',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText2!
+                            .copyWith(fontSize: 12, color: Colors.grey)),
                   ],
                 ),
               ),

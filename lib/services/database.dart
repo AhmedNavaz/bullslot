@@ -25,13 +25,18 @@ class DatabaseMethods extends GetxController {
   }
 
   uploadUserInfo(UserLocal user) {
-    FirebaseFirestore.instance.collection("users").doc(user.id).set({
-      "uid": user.id,
-      "name": user.name,
-      "email": user.email,
-    }).catchError((e) {
-      print(e.toString());
-    });
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.id)
+        .set(user.toJson());
+  }
+
+  // update user info
+  Future<void> updateUserInfo(UserLocal user) async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.id)
+        .update(user.toJson());
   }
 
   isNewUser(String uid) async {

@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -23,16 +22,16 @@ class AuthController extends GetxController {
 
   Future signUp(String email, String password, String name) async {
     try {
-      UserCredential _authResult = await _auth.createUserWithEmailAndPassword(
+      UserCredential authResult = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
 
-      UserLocal _user = UserLocal(
-        id: _authResult.user!.uid,
+      UserLocal user = UserLocal(
+        id: authResult.user!.uid,
         name: name,
         email: email,
       );
-      localUser.value = _user;
-      databaseMethods.uploadUserInfo(_user);
+      localUser.value = user;
+      databaseMethods.uploadUserInfo(user);
       Get.back();
     } catch (e) {
       Get.snackbar(
@@ -52,10 +51,10 @@ class AuthController extends GetxController {
 
   Future signIn(String email, String password) async {
     try {
-      UserCredential _authResult = await _auth.signInWithEmailAndPassword(
+      UserCredential authResult = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
 
-      localUser.value = await databaseMethods.getUser(_authResult.user!.uid);
+      localUser.value = await databaseMethods.getUser(authResult.user!.uid);
       Get.back();
     } catch (e) {
       Get.snackbar(

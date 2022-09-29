@@ -1,9 +1,11 @@
 import 'package:bullslot/screens/authentication/forgot.dart';
+import 'package:bullslot/screens/body.dart';
 import 'package:bullslot/screens/bottom_nav/home.dart';
 import 'package:bullslot/screens/bottom_nav/home/booking/booking.dart';
 import 'package:bullslot/screens/bottom_nav/home/customRequest.dart';
 import 'package:bullslot/screens/bottom_nav/home/deliverRates.dart';
 import 'package:bullslot/screens/bottom_nav/home/productDetails.dart';
+import 'package:bullslot/screens/editProfile.dart';
 import 'package:flutter/material.dart';
 
 import '../models/product.dart';
@@ -22,6 +24,8 @@ const String booking = 'booking';
 const String checkout = 'checkout';
 const String gallery = 'gallery';
 const String contactUs = 'contact-us';
+const String editProfile = 'edit-profile';
+const String imageView = 'image-view';
 
 class RouteGenerator {
   static Route<dynamic> onGeneratedRoutes(RouteSettings settings) {
@@ -34,7 +38,7 @@ class RouteGenerator {
         return _getPageRoute(const Root());
 
       case home:
-        return _getPageRoute(const HomeScreen());
+        return _getPageRoute(const BottomNavBar());
 
       case forgotPassword:
         return _getPageRoute(const ForgotPasswordScreen());
@@ -66,8 +70,14 @@ class RouteGenerator {
       case gallery:
         return _getPageRoute(GalleryScreen());
 
+      case imageView:
+        return _getPageRoute(ImageView(image: args['url'] as String));
+
       case contactUs:
         return _getPageRoute(ContactUsScreen());
+
+      case editProfile:
+        return _getPageRoute(const EditProfile());
 
       default:
         return _errorRoute();
