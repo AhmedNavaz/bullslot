@@ -206,6 +206,8 @@ class DatabaseMethods extends GetxController {
           .doc(order.id)
           .set(order.toJson());
       await FirebaseFirestore.instance
+          .collection('products')
+          .doc(order.productId)
           .collection('orders')
           .doc(order.id)
           .set(order.toJson());
@@ -236,6 +238,19 @@ class DatabaseMethods extends GetxController {
           .collection('products')
           .doc(id)
           .update({'availableSlots': slot});
+    } catch (e) {
+      print(e.toString());
+      rethrow;
+    }
+  }
+
+  // mark as sold
+  Future<void> markAsSold(String id) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('products')
+          .doc(id)
+          .update({'sold': true});
     } catch (e) {
       print(e.toString());
       rethrow;

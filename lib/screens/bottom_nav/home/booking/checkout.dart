@@ -349,18 +349,26 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                                       widget.deliveryCharges!)
                                                   .toStringAsFixed(2),
                                           name: authController
-                                              .localUser.value.name,
+                                              .localUser.value.name!,
                                           email: authController
-                                              .localUser.value.email,
-                                          phone: widget.phone,
-                                          address: widget.address,
+                                              .localUser.value.email!,
+                                          phone: authController
+                                              .localUser.value.phone!,
+                                          address: authController
+                                              .localUser.value.address!,
                                           deliveryType: widget.deliveryType,
                                         ))
                                     .then((value) {
-                                  orderController.updateAvailableSlots(
-                                      widget.product!.id!,
-                                      widget.product!.availableSlots! -
-                                          widget.bookedCount!);
+                                  if (widget.product!.totalSlots != null) {
+                                    orderController.updateAvailableSlots(
+                                        widget.product!.id!,
+                                        widget.product!.availableSlots! -
+                                            widget.bookedCount!);
+                                  } else {
+                                    orderController
+                                        .markAsSold(widget.product!.id!);
+                                  }
+
                                   showDialog(
                                     context: context,
                                     barrierDismissible: false,

@@ -1,17 +1,29 @@
 import 'package:bullslot/controllers/authController.dart';
-import 'package:bullslot/models/product.dart';
+import 'package:bullslot/controllers/orderController.dart';
 import 'package:bullslot/models/orderStatus.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../models/city.dart';
 import '../../widgets/orderStatus.dart';
 
-class HistoryScreen extends StatelessWidget {
+class HistoryScreen extends StatefulWidget {
   HistoryScreen({super.key});
 
+  @override
+  State<HistoryScreen> createState() => _HistoryScreenState();
+}
+
+class _HistoryScreenState extends State<HistoryScreen> {
   AuthController authController = Get.find<AuthController>();
+
+  OrderController orderController = Get.put(OrderController());
+
+  @override
+  void initState() {
+    orderController.getOfficeAddress();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

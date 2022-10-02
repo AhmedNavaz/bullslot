@@ -5,6 +5,7 @@ import 'package:bullslot/screens/bottom_nav/home/booking/booking.dart';
 import 'package:bullslot/screens/bottom_nav/home/customRequest.dart';
 import 'package:bullslot/screens/bottom_nav/home/deliverRates.dart';
 import 'package:bullslot/screens/bottom_nav/home/productDetails.dart';
+import 'package:bullslot/screens/bottom_nav/pdfView.dart';
 import 'package:bullslot/screens/editProfile.dart';
 import 'package:flutter/material.dart';
 

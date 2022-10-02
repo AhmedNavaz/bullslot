@@ -16,7 +16,9 @@ class ProductController extends GetxController {
         products.clear();
         liveProducts.clear();
         value.map((e) {
-          if (e.date!.isAfter(DateTime.now())) {
+          if (e.date!.isAfter(DateTime.now()) &&
+              e.availableSlots != 0 &&
+              e.sold == false) {
             if (e.totalSlots == null) {
               liveProducts.add(e);
             } else {

@@ -51,4 +51,14 @@ class OrderController extends GetxController {
       rethrow;
     }
   }
+
+  // mark as sold
+  Future<void> markAsSold(String id) async {
+    try {
+      await databaseMethods.markAsSold(id);
+    } catch (e) {
+      print(e.toString());
+      rethrow;
+    }
+  }
 }

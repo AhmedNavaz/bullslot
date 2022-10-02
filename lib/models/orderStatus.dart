@@ -13,9 +13,10 @@ class OrderStatus {
   String? imageProof;
   String? bill;
   String? name;
-  String? email;
   String? phone;
+  String? email;
   String? address;
+  String? invoiceUrl;
 
   OrderStatus({
     this.id,
@@ -28,9 +29,10 @@ class OrderStatus {
     this.imageProof,
     this.bill,
     this.name,
-    this.email,
     this.phone,
+    this.email,
     this.address,
+    this.invoiceUrl,
   });
 
   OrderStatus.fromJson(Map<String, dynamic> json) {
@@ -45,9 +47,10 @@ class OrderStatus {
     imageProof = json['imageProof'];
     bill = json['bill'];
     name = json['name'];
-    email = json['email'];
     phone = json['phone'];
+    email = json['email'];
     address = json['address'];
+    invoiceUrl = json['invoiceUrl'];
   }
 
   Map<String, dynamic> toJson() {
@@ -66,9 +69,10 @@ class OrderStatus {
     data['imageProof'] = this.imageProof;
     data['bill'] = this.bill;
     data['name'] = this.name;
-    data['email'] = this.email;
     data['phone'] = this.phone;
+    data['email'] = this.email;
     data['address'] = this.address;
+    data['invoiceUrl'] = this.invoiceUrl;
     return data;
   }
 }

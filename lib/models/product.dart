@@ -16,6 +16,7 @@ class Product {
   bool? officePickup;
   int? totalSlots;
   int? availableSlots;
+  bool? sold;
 
   Product({
     this.id,
@@ -31,6 +32,7 @@ class Product {
     this.officePickup,
     this.totalSlots,
     this.availableSlots,
+    this.sold,
   });
 
   Product.fromJson(Map<String, dynamic> json) {
@@ -52,6 +54,7 @@ class Product {
     officePickup = json['officePickup'];
     totalSlots = json['totalSlots'];
     availableSlots = json['availableSlots'];
+    sold = json['sold'];
   }
 
   Map<String, dynamic> toJson() {
@@ -72,6 +75,7 @@ class Product {
     data['officePickup'] = this.officePickup;
     data['totalSlots'] = this.totalSlots;
     data['availableSlots'] = this.availableSlots;
+    data['sold'] = this.sold;
     return data;
   }
 }
