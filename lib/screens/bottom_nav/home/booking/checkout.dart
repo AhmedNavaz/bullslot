@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:async';
 
 import 'package:bullslot/constants/colors.dart';
 import 'package:bullslot/constants/navigation.dart';
@@ -50,6 +51,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   File? proofImage;
 
+  // 30 minutes from now
+  DateTime bookingTime = DateTime.now().add(const Duration(minutes: 30));
+
+  Utils utils = Utils();
+  late String clock;
+  late Timer clockSec;
+
   @override
   void initState() {
     orderController.getBankAccounts().then((value) {
@@ -57,7 +65,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         isLoading = false;
       });
     });
+
     super.initState();
+    clock = DateTime.now().second.toString();
+    // defines a timer
+    clockSec = Timer.periodic(const Duration(seconds: 1), (Timer t) {
+      setState(() {
+        clock = DateTime.now().second.toString();
+      });
+    });
   }
 
   Future<String> uploadFile(String id) async {
@@ -92,6 +108,22 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                   child: Column(
                     children: [
+                      Row(
+                        children: [
+                          Text('Booking will expire after: ',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2!
+                                  .copyWith(color: Colors.grey)),
+                          const Spacer(),
+                          Text(utils.getRemainingTime(bookingTime),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1!
+                                  .copyWith(color: primaryColor)),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
                       Container(
                         alignment: Alignment.bottomLeft,
                         padding: const EdgeInsets.only(left: 10),
@@ -313,12 +345,18 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () {
+                            if (bookingTime.isBefore(DateTime.now())) {
+                              Get.snackbar(
+                                'Booking Time Expired',
+                                'Kindly book the product again.',
+                              );
+                              return;
+                            }
                             if (proofImage != null) {
                               setState(() {
                                 isUploading = true;
                               });
                               String id = const Uuid().v1();
-
                               uploadFile(id).then((value) {
                                 orderController
                                     .sendOrder(

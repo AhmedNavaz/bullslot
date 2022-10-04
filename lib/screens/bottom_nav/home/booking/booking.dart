@@ -327,7 +327,7 @@ class _BookingScreenState extends State<BookingScreen> {
                             .headline2!
                             .copyWith(color: Colors.black, fontSize: 22),
                       ),
-                      const SizedBox(height: 15),
+                      const SizedBox(height: 10),
                       Text(
                         'asldkfjasd sld;fkjs odflksdjf sad;fkljsadio fjsd;lfjksd;iofjasd;lfj as;ldfjasdofjasd;lkfjaweoifjsdlfjasdklfjas df;sdklfjsd;iofjoas;djfklasdjf;oisdjf;lsajga;lgjasiofj  sdf;iasdojfosjf a;l',
                         style: Theme.of(context).textTheme.bodyText2,

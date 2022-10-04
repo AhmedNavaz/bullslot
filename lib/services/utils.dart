@@ -12,7 +12,7 @@ class Utils {
         '$minutes:'.padLeft(3, '0') +
         '$seconds'.padLeft(2, '0');
     if (remaining.contains('-')) {
-      return '00:00:00';
+      return 'Expired';
     }
     return remaining;
   }
