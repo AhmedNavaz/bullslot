@@ -48,6 +48,7 @@ dependencies:
   syncfusion_flutter_pdf: ^20.3.47
   path_provider: ^2.0.11
   open_file: ^3.2.1
+  pull_to_refresh: ^2.0.0
 
 dev_dependencies:
   flutter_test:

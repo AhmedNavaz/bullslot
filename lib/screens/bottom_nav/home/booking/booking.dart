@@ -27,6 +27,8 @@ class _BookingScreenState extends State<BookingScreen> {
   var officePickupSelected = false;
   var value;
 
+  TextEditingController nameController = TextEditingController();
+
   TextEditingController phoneController = TextEditingController();
 
   TextEditingController addressController = TextEditingController();
@@ -38,6 +40,7 @@ class _BookingScreenState extends State<BookingScreen> {
 
   @override
   void initState() {
+    nameController.text = authController.localUser.value.name!;
     phoneController.text = authController.localUser.value.phone!;
     addressController.text = authController.localUser.value.address!;
     if (widget.product!.totalSlots != null) {
@@ -175,12 +178,24 @@ class _BookingScreenState extends State<BookingScreen> {
               SizedBox(height: widget.product!.totalSlots != null ? 15 : 0),
               Align(
                 alignment: Alignment.topLeft,
-                child: Text(
-                  'Delivery',
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline2!
-                      .copyWith(color: Colors.black, fontSize: 22),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      'Delivery',
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline2!
+                          .copyWith(color: Colors.black, fontSize: 22),
+                    ),
+                    Text(
+                      ' (Must select any 1 delivery type)',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText2!
+                          .copyWith(fontSize: 12, color: Colors.grey),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 10),
@@ -275,39 +290,44 @@ class _BookingScreenState extends State<BookingScreen> {
                       ],
                     )
                   : Container(),
-              Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    const SizedBox(height: 20),
-                    Container(
-                      alignment: Alignment.topLeft,
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: Text('Kindly fill the below details',
-                          style: Theme.of(context).textTheme.bodyText1),
-                    ),
-                    formField(
-                      title: 'Phone Number',
-                      controller: phoneController,
-                      hintText: 'Enter you phone/whatsapp number',
-                      inputType: TextInputType.phone,
-                    ),
-                    officePickupSelected
-                        ? Container()
-                        : formField(
+              widget.product!.officePickup!
+                  ? Container()
+                  : Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 20),
+                          Container(
+                            alignment: Alignment.topLeft,
+                            padding: const EdgeInsets.only(bottom: 10),
+                            child: Text('Kindly fill the below details',
+                                style: Theme.of(context).textTheme.bodyText1),
+                          ),
+                          formField(
+                            title: 'Name',
+                            controller: nameController,
+                            hintText: 'Enter your name',
+                          ),
+                          formField(
+                            title: 'Phone Number',
+                            controller: phoneController,
+                            hintText: 'Enter you phone/whatsapp number',
+                            inputType: TextInputType.phone,
+                          ),
+                          formField(
                             title: 'Shipping Address',
                             controller: addressController,
                             hintText: 'Enter your shipping address',
                           ),
-                    Text(
-                        'To save/edit your details permanently, go to "Edit Profile".',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText2!
-                            .copyWith(fontSize: 12, color: Colors.grey)),
-                  ],
-                ),
-              ),
+                          Text(
+                              'To save/edit your details permanently, go to "Edit Profile".',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2!
+                                  .copyWith(fontSize: 12, color: Colors.grey)),
+                        ],
+                      ),
+                    ),
               const SizedBox(height: 20),
               Container(
                 width: MediaQuery.of(context).size.width * 0.85,
@@ -360,6 +380,7 @@ class _BookingScreenState extends State<BookingScreen> {
                               : officePickupSelected
                                   ? 'Office Pickup'
                                   : '${widget.product!.deliveryRates![value - 1].location}',
+                          'name': nameController.text,
                           'phone': phoneController.text,
                           'address': addressController.text,
                         });

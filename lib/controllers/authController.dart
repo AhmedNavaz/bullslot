@@ -1,3 +1,5 @@
+import 'package:bullslot/constants/navigation.dart';
+import 'package:bullslot/router/routerGenerator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -104,7 +106,9 @@ class AuthController extends GetxController {
       //     .update({"token": FieldValue.delete()}).then((value) {
       //   _auth.signOut();
       // });
-      _auth.signOut();
+      _auth.signOut().then((value) {
+        navigationController.navigateTo(login);
+      });
     } catch (e) {
       Get.snackbar(
         '',

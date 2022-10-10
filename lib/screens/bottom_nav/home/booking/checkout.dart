@@ -24,6 +24,7 @@ class CheckoutScreen extends StatefulWidget {
     this.bookedCount,
     this.deliveryCharges,
     this.deliveryType,
+    this.name,
     this.phone,
     this.address,
   });
@@ -32,6 +33,7 @@ class CheckoutScreen extends StatefulWidget {
   int? bookedCount;
   double? deliveryCharges;
   String? deliveryType;
+  String? name;
   String? phone;
   String? address;
 
@@ -386,14 +388,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                                           widget.bookedCount! +
                                                       widget.deliveryCharges!)
                                                   .toStringAsFixed(2),
-                                          name: authController
-                                              .localUser.value.name!,
+                                          userId: authController
+                                              .localUser.value.id!,
+                                          name: widget.name,
                                           email: authController
                                               .localUser.value.email!,
-                                          phone: authController
-                                              .localUser.value.phone!,
-                                          address: authController
-                                              .localUser.value.address!,
+                                          phone: widget.phone,
+                                          address: widget.address,
                                           deliveryType: widget.deliveryType,
                                         ))
                                     .then((value) {

@@ -11,11 +11,13 @@ import 'package:flutter/material.dart';
 
 import '../models/product.dart';
 import '../root.dart';
+import '../screens/authentication/body.dart';
 import '../screens/bottom_nav/home/booking/checkout.dart';
 import '../screens/contactUs.dart';
 import '../screens/gallery.dart';
 
 const String root = '/';
+const String login = '/login';
 const String home = 'home';
 const String forgotPassword = 'forgot-password';
 const String productDetails = 'product-details';
@@ -37,6 +39,9 @@ class RouteGenerator {
     switch (settings.name) {
       case root:
         return _getPageRoute(const Root());
+
+      case login:
+        return _getPageRoute(const AuthBody());
 
       case home:
         return _getPageRoute(const BottomNavBar());
@@ -64,6 +69,7 @@ class RouteGenerator {
           bookedCount: args['bookedCount'] as int,
           deliveryCharges: args['deliveryCharges'] as double,
           deliveryType: args['deliveryType'] as String,
+          name: args['name'] as String,
           phone: args['phone'] as String,
           address: args['address'] as String,
         ));

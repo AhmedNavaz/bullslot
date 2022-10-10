@@ -12,6 +12,7 @@ class OrderStatus {
   String? deliveryType;
   String? imageProof;
   String? bill;
+  String? userId;
   String? name;
   String? phone;
   String? email;
@@ -28,6 +29,7 @@ class OrderStatus {
     this.deliveryType,
     this.imageProof,
     this.bill,
+    this.userId,
     this.name,
     this.phone,
     this.email,
@@ -46,6 +48,7 @@ class OrderStatus {
     deliveryType = json['deliveryType'];
     imageProof = json['imageProof'];
     bill = json['bill'];
+    userId = json['userId'];
     name = json['name'];
     phone = json['phone'];
     email = json['email'];
@@ -68,6 +71,7 @@ class OrderStatus {
     data['deliveryType'] = this.deliveryType;
     data['imageProof'] = this.imageProof;
     data['bill'] = this.bill;
+    data['userId'] = this.userId;
     data['name'] = this.name;
     data['phone'] = this.phone;
     data['email'] = this.email;

@@ -38,9 +38,17 @@ class _OrderStatusWidgetState extends State<OrderStatusWidget> {
 
   @override
   void initState() {
-    for (var element in productController.products) {
-      if (element.id == widget.orderStatus!.productId) {
-        product = element;
+    if (widget.orderStatus!.slots == 0) {
+      for (var element in productController.liveProducts) {
+        if (element.id == widget.orderStatus!.productId) {
+          product = element;
+        }
+      }
+    } else {
+      for (var element in productController.products) {
+        if (element.id == widget.orderStatus!.productId) {
+          product = element;
+        }
       }
     }
 
@@ -201,11 +209,11 @@ class _OrderStatusWidgetState extends State<OrderStatusWidget> {
     headerRow.cells[0].stringFormat.alignment = PdfTextAlignment.center;
     headerRow.cells[1].value = 'Product Name';
     headerRow.cells[2].value =
-        product!.totalSlots! == null ? 'Price' : 'Slot Price';
+        product!.totalSlots == null ? 'Price' : 'Slot Price';
     headerRow.cells[3].value = 'Quantity';
     headerRow.cells[4].value = 'Total';
     //Add row
-    double price = product!.totalSlots! == null
+    double price = product!.totalSlots == null
         ? double.parse(product!.totalPrice!)
         : double.parse(product!.totalPrice!) / product!.totalSlots!;
     int quantity =
@@ -294,11 +302,11 @@ class _OrderStatusWidgetState extends State<OrderStatusWidget> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 child: Text(
-                  'Time: ${utils.getRemainingTime(product!.date!)}',
+                  'Order ID: ${'#${widget.orderStatus!.id}'.split('-').first.toUpperCase()}',
                   style: Theme.of(context)
                       .textTheme
                       .headline2!
-                      .copyWith(fontSize: 18),
+                      .copyWith(fontSize: 16),
                 ),
               ),
               Positioned(
@@ -378,7 +386,7 @@ class _OrderStatusWidgetState extends State<OrderStatusWidget> {
                             .copyWith(color: Colors.white),
                       ),
                       Text(
-                        '\$${product!.totalPrice}',
+                        '#${product!.totalPrice}',
                         style: Theme.of(context)
                             .textTheme
                             .bodyText1!
@@ -396,15 +404,14 @@ class _OrderStatusWidgetState extends State<OrderStatusWidget> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Original Price: \$${product!.totalPrice}'
-                            .split('.')[0],
+                        'Original Price: #${product!.totalPrice}'.split('.')[0],
                         style: Theme.of(context)
                             .textTheme
                             .bodyText2!
                             .copyWith(color: Colors.white),
                       ),
                       Text(
-                        'Slot Price: \$${double.parse(product!.totalPrice!) / product!.totalSlots!.toDouble()}'
+                        'Slot Price: #${double.parse(product!.totalPrice!) / product!.totalSlots!.toDouble()}'
                             .split('.')[0],
                         style: Theme.of(context)
                             .textTheme

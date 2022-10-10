@@ -144,7 +144,8 @@ class DatabaseMethods extends GetxController {
   Future<void> sendMessage(String name, String email, String title,
       String description, String phone) async {
     try {
-      await FirebaseFirestore.instance.collection('messages').add({
+      String id = Uuid().v1();
+      await FirebaseFirestore.instance.collection('messages').doc(id).set({
         'id': Uuid().v1(),
         'name': name,
         'email': email,
@@ -164,8 +165,9 @@ class DatabaseMethods extends GetxController {
   Future<void> sendRequest(int slot, String name, String email,
       String description, String phone) async {
     try {
-      await FirebaseFirestore.instance.collection('requests').add({
-        'id': Uuid().v1(),
+      String id = Uuid().v1();
+      await FirebaseFirestore.instance.collection('requests').doc(id).set({
+        'id': id,
         'slot': slot,
         'name': name,
         'email': email,

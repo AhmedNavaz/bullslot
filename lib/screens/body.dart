@@ -99,16 +99,12 @@ class _BottomNavBarState extends State<BottomNavBar> {
                   ListTile(
                     leading: const Icon(Icons.group_outlined),
                     title: const Text('About Us'),
-                    onTap: () {
-                      _authController.signOut();
-                    },
+                    onTap: () {},
                   ),
                   ListTile(
                     leading: const Icon(Icons.policy_outlined),
                     title: const Text('Terms and Conditions'),
-                    onTap: () {
-                      _authController.signOut();
-                    },
+                    onTap: () {},
                   ),
                   ListTile(
                     leading: const Icon(Icons.logout_outlined),
