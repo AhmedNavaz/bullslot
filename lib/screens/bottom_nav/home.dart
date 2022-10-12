@@ -43,13 +43,20 @@ class _HomeScreenState extends State<HomeScreen> {
       RefreshController(initialRefresh: false);
   void _onRefresh() async {
     await Future.delayed(const Duration(milliseconds: 2000));
+    setState(() {
+      isLoading = true;
+    });
     _refreshController.refreshCompleted();
     imagesController.getBannerImages().then((value) {
       categoryController.getCategories().then((value) {
         locationController.getLocations().then((value) {
           productController.getProducts().then((value) {
-            filteredProductList = productController.products;
+            filteredProductList = productController.products.where((e) {
+              return e.date!.isAfter(DateTime.now()) && e.availableSlots != 0;
+            }).toList();
             setState(() {
+              categoryIndex = 0;
+              _selectedLocation = 'All';
               isLoading = false;
             });
           });
@@ -69,7 +76,9 @@ class _HomeScreenState extends State<HomeScreen> {
       categoryController.getCategories().then((value) {
         locationController.getLocations().then((value) {
           productController.getProducts().then((value) {
-            filteredProductList = productController.products;
+            filteredProductList = productController.products.where((e) {
+              return e.date!.isAfter(DateTime.now()) && e.availableSlots != 0;
+            }).toList();
             setState(() {
               isLoading = false;
             });
@@ -84,19 +93,30 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void filterProducts(String category, String location) {
     if (category == 'All' && location == 'All') {
-      filteredProductList = productController.products;
+      filteredProductList = productController.products.where((e) {
+        return e.date!.isAfter(DateTime.now()) && e.availableSlots != 0;
+      }).toList();
     } else if (category == 'All' && location != 'All') {
       filteredProductList = productController.products
-          .where((element) => element.location == location)
+          .where((element) =>
+              element.location == location &&
+              element.date!.isAfter(DateTime.now()) &&
+              element.availableSlots != 0)
           .toList();
     } else if (category != 'All' && location == 'All') {
       filteredProductList = productController.products
-          .where((element) => element.category == category)
+          .where((element) =>
+              element.category == category &&
+              element.date!.isAfter(DateTime.now()) &&
+              element.availableSlots != 0)
           .toList();
     } else {
       filteredProductList = productController.products
           .where((element) =>
-              element.category == category && element.location == location)
+              element.category == category &&
+              element.location == location &&
+              element.date!.isAfter(DateTime.now()) &&
+              element.availableSlots != 0)
           .toList();
     }
     setState(() {});
@@ -337,7 +357,7 @@ class _HomeScreenState extends State<HomeScreen> {
             isLoading
                 ? const Center(
                     child: CircularProgressIndicator(color: primaryColor))
-                : productController.products.isEmpty
+                : filteredProductList.isEmpty
                     ? Column(
                         children: [
                           const SizedBox(height: 50),

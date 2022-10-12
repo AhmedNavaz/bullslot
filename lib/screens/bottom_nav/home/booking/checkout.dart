@@ -396,6 +396,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                           phone: widget.phone,
                                           address: widget.address,
                                           deliveryType: widget.deliveryType,
+                                          refundReason: null,
+                                          refundProof: null,
                                         ))
                                     .then((value) {
                                   if (widget.product!.totalSlots != null) {

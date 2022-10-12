@@ -25,6 +25,7 @@ class BookingScreen extends StatefulWidget {
 class _BookingScreenState extends State<BookingScreen> {
   final _formKey = GlobalKey<FormState>();
   var officePickupSelected = false;
+  bool showDetails = false;
   var value;
 
   TextEditingController nameController = TextEditingController();
@@ -226,6 +227,7 @@ class _BookingScreenState extends State<BookingScreen> {
                             setState(() {
                               value = 0;
                               officePickupSelected = true;
+                              showDetails = false;
                             });
                           }),
                     )
@@ -262,7 +264,7 @@ class _BookingScreenState extends State<BookingScreen> {
                             i++)
                           ListTile(
                             leading: Text(
-                              '\$${widget.product!.deliveryRates![i].rate}',
+                              '#${widget.product!.deliveryRates![i].rate}',
                               style: Theme.of(context)
                                   .textTheme
                                   .headline2!
@@ -284,15 +286,15 @@ class _BookingScreenState extends State<BookingScreen> {
                                   setState(() {
                                     value = i + 1;
                                     officePickupSelected = false;
+                                    showDetails = true;
                                   });
                                 }),
                           )
                       ],
                     )
                   : Container(),
-              widget.product!.officePickup!
-                  ? Container()
-                  : Form(
+              showDetails
+                  ? Form(
                       key: _formKey,
                       child: Column(
                         children: [
@@ -327,7 +329,8 @@ class _BookingScreenState extends State<BookingScreen> {
                                   .copyWith(fontSize: 12, color: Colors.grey)),
                         ],
                       ),
-                    ),
+                    )
+                  : Container(),
               const SizedBox(height: 20),
               Container(
                 width: MediaQuery.of(context).size.width * 0.85,
@@ -362,36 +365,34 @@ class _BookingScreenState extends State<BookingScreen> {
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      if ((widget.product!.totalSlots != null &&
-                              bookedCount > 0) ||
-                          widget.product!.totalSlots == null) {
-                        navigationController.navigateWithArg(checkout, {
-                          'product': widget.product,
-                          'bookedCount': bookedCount,
-                          'deliveryCharges': widget.product!.freeDelivery! ||
-                                  widget.product!.officePickup! &&
-                                      officePickupSelected
-                              ? 0.0
-                              : double.parse(widget
-                                  .product!.deliveryRates![value - 1].rate!),
-                          'deliveryType': widget.product!.freeDelivery!
-                              ? 'Free Delivery'
-                              : officePickupSelected
-                                  ? 'Office Pickup'
-                                  : '${widget.product!.deliveryRates![value - 1].location}',
-                          'name': nameController.text,
-                          'phone': phoneController.text,
-                          'address': addressController.text,
-                        });
-                      } else {
-                        // show snackbar
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Please select slot'),
-                          ),
-                        );
-                      }
+                    if ((widget.product!.totalSlots != null &&
+                            bookedCount > 0) ||
+                        widget.product!.totalSlots == null) {
+                      navigationController.navigateWithArg(checkout, {
+                        'product': widget.product,
+                        'bookedCount': bookedCount,
+                        'deliveryCharges': widget.product!.freeDelivery! ||
+                                widget.product!.officePickup! &&
+                                    officePickupSelected
+                            ? 0.0
+                            : double.parse(widget
+                                .product!.deliveryRates![value - 1].rate!),
+                        'deliveryType': widget.product!.freeDelivery!
+                            ? 'Free Delivery'
+                            : officePickupSelected
+                                ? 'Office Pickup'
+                                : '${widget.product!.deliveryRates![value - 1].location}',
+                        'name': nameController.text,
+                        'phone': phoneController.text,
+                        'address': addressController.text,
+                      });
+                    } else {
+                      // show snackbar
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Please select slot'),
+                        ),
+                      );
                     }
                   },
                   child: Text(

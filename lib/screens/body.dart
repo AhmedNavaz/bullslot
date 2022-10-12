@@ -3,6 +3,8 @@ import 'package:bullslot/constants/navigation.dart';
 import 'package:bullslot/screens/bottom_nav/history.dart';
 import 'package:bullslot/screens/bottom_nav/home.dart';
 import 'package:bullslot/screens/bottom_nav/liveSell.dart';
+import 'package:bullslot/services/local_push_notifications.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -39,6 +41,17 @@ class _BottomNavBarState extends State<BottomNavBar> {
       setState(() {
         isLoading = false;
       });
+    });
+    FirebaseMessaging.instance.getInitialMessage();
+    FirebaseMessaging.onMessage.listen((message) {
+      LocalNotificationService.display(message);
+    });
+    storeNotificationToken();
+  }
+
+  storeNotificationToken() async {
+    await FirebaseMessaging.instance.subscribeToTopic('all').then((value) {
+      debugPrint('Subscribed to topic');
     });
   }
 

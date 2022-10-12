@@ -18,6 +18,8 @@ class OrderStatus {
   String? email;
   String? address;
   String? invoiceUrl;
+  String? refundReason;
+  String? refundProof;
 
   OrderStatus({
     this.id,
@@ -35,6 +37,8 @@ class OrderStatus {
     this.email,
     this.address,
     this.invoiceUrl,
+    this.refundReason,
+    this.refundProof,
   });
 
   OrderStatus.fromJson(Map<String, dynamic> json) {
@@ -54,6 +58,8 @@ class OrderStatus {
     email = json['email'];
     address = json['address'];
     invoiceUrl = json['invoiceUrl'];
+    refundReason = json['refundReason'];
+    refundProof = json['refundProof'];
   }
 
   Map<String, dynamic> toJson() {
@@ -77,6 +83,8 @@ class OrderStatus {
     data['email'] = this.email;
     data['address'] = this.address;
     data['invoiceUrl'] = this.invoiceUrl;
+    data['refundReason'] = this.refundReason;
+    data['refundProof'] = this.refundProof;
     return data;
   }
 }

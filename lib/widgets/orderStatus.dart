@@ -441,45 +441,112 @@ class _OrderStatusWidgetState extends State<OrderStatusWidget> {
                     bottomLeft: Radius.circular(20),
                     bottomRight: Radius.circular(20))),
             padding: const EdgeInsets.symmetric(vertical: 7.5, horizontal: 15),
-            child:
-                widget.orderStatus!.status!.toString().split('.')[1] == 'PAID'
-                    ? Row(
-                        children: [
-                          Text(
-                            '${widget.orderStatus!.status}'.split('.')[1],
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline2!
-                                .copyWith(fontSize: 20),
-                          ),
-                          const Spacer(),
-                          InkWell(
-                            onTap: () {
-                              _generateInvoice();
-                            },
-                            child: Row(
-                              children: [
-                                Text('Invoice',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1!
-                                        .copyWith(color: Colors.white)),
-                                const Icon(Icons.download,
-                                    color: Colors.white, size: 20),
-                              ],
-                            ),
-                          ),
-                        ],
-                      )
-                    : Center(
-                        child: Text(
-                          '${widget.orderStatus!.status}'.split('.')[1],
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline2!
-                              .copyWith(fontSize: 20),
+            child: widget.orderStatus!.status!.toString().split('.')[1] ==
+                        'PAID' ||
+                    widget.orderStatus!.status!.toString().split('.')[1] ==
+                        'DELIVERED' ||
+                    widget.orderStatus!.status!.toString().split('.')[1] ==
+                        'REFUNDED'
+                ? Row(
+                    children: [
+                      Text(
+                        '${widget.orderStatus!.status}'.split('.')[1],
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline2!
+                            .copyWith(fontSize: 20),
+                      ),
+                      const Spacer(),
+                      InkWell(
+                        onTap: () {
+                          if (widget.orderStatus!.status!
+                                  .toString()
+                                  .split('.')[1] ==
+                              'REFUNDED') {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Scaffold(
+                                    appBar: AppBar(
+                                      title: Text('Refund Details'),
+                                    ),
+                                    body: Padding(
+                                      padding: const EdgeInsets.all(20),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text('Refund Reason',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headline2!
+                                                  .copyWith(
+                                                      fontSize: 20,
+                                                      color: Colors.black)),
+                                          Text(
+                                              widget.orderStatus!.refundReason!,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText1),
+                                          const SizedBox(height: 20),
+                                          Text('Refund Proof',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headline2!
+                                                  .copyWith(
+                                                      fontSize: 20,
+                                                      color: Colors.black)),
+                                          Image.network(
+                                            widget.orderStatus!.refundProof!,
+                                            height: 300,
+                                            width: double.infinity,
+                                            fit: BoxFit.contain,
+                                          ),
+                                        ],
+                                      ),
+                                    )),
+                              ),
+                            );
+                          } else {
+                            _generateInvoice();
+                          }
+                        },
+                        child: Row(
+                          children: [
+                            Text(
+                                widget.orderStatus!.status!
+                                            .toString()
+                                            .split('.')[1] ==
+                                        'REFUNDED'
+                                    ? 'Details'
+                                    : 'Invoice',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .copyWith(color: Colors.white)),
+                            Icon(
+                                widget.orderStatus!.status!
+                                            .toString()
+                                            .split('.')[1] ==
+                                        'REFUNDED'
+                                    ? Icons.open_in_new
+                                    : Icons.download,
+                                color: Colors.white,
+                                size: 20),
+                          ],
                         ),
                       ),
+                    ],
+                  )
+                : Center(
+                    child: Text(
+                      '${widget.orderStatus!.status}'.split('.')[1],
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline2!
+                          .copyWith(fontSize: 20),
+                    ),
+                  ),
           ),
         ],
       ),

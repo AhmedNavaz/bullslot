@@ -32,19 +32,30 @@ class _LiveSellScreenState extends State<LiveSellScreen> {
 
   void filterProducts(String category, String location) {
     if (category == 'All' && location == 'All') {
-      filteredProductList = productController.liveProducts;
+      filteredProductList = productController.liveProducts.where((e) {
+        return e.date!.isAfter(DateTime.now()) && e.sold == false;
+      }).toList();
     } else if (category == 'All' && location != 'All') {
       filteredProductList = productController.liveProducts
-          .where((element) => element.location == location)
+          .where((element) =>
+              element.location == location &&
+              element.date!.isAfter(DateTime.now()) &&
+              element.sold == false)
           .toList();
     } else if (category != 'All' && location == 'All') {
       filteredProductList = productController.liveProducts
-          .where((element) => element.category == category)
+          .where((element) =>
+              element.category == category &&
+              element.date!.isAfter(DateTime.now()) &&
+              element.sold == false)
           .toList();
     } else {
       filteredProductList = productController.liveProducts
           .where((element) =>
-              element.category == category && element.location == location)
+              element.category == category &&
+              element.location == location &&
+              element.date!.isAfter(DateTime.now()) &&
+              element.sold == false)
           .toList();
     }
     setState(() {});
@@ -52,7 +63,12 @@ class _LiveSellScreenState extends State<LiveSellScreen> {
 
   @override
   void initState() {
-    filteredProductList = productController.liveProducts;
+    productController.getProducts().then((value) {
+      filteredProductList = productController.liveProducts.where((e) {
+        return e.date!.isAfter(DateTime.now()) && e.sold == false;
+      }).toList();
+    });
+
     super.initState();
   }
 
@@ -62,7 +78,11 @@ class _LiveSellScreenState extends State<LiveSellScreen> {
     await Future.delayed(const Duration(milliseconds: 2000));
     _refreshController.refreshCompleted();
     productController.getProducts().then((value) {
-      filteredProductList = productController.liveProducts;
+      filteredProductList = productController.liveProducts.where((e) {
+        return e.date!.isAfter(DateTime.now()) && e.sold == false;
+      }).toList();
+      categoryIndex = 0;
+      _selectedLocation = 'All';
       setState(() {});
     });
   }
@@ -199,7 +219,7 @@ class _LiveSellScreenState extends State<LiveSellScreen> {
               ],
             ),
           ),
-          productController.liveProducts.isEmpty
+          filteredProductList.isEmpty
               ? Column(
                   children: [
                     const SizedBox(height: 50),
