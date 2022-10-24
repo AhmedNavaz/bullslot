@@ -7,8 +7,10 @@ import 'package:bullslot/constants/navigation.dart';
 import 'package:bullslot/controllers/authController.dart';
 import 'package:bullslot/controllers/orderController.dart';
 import 'package:bullslot/router/routerGenerator.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../models/product.dart';
 import '../../../../widgets/formField.dart';
@@ -351,11 +353,31 @@ class _BookingScreenState extends State<BookingScreen> {
                             .copyWith(color: Colors.black, fontSize: 22),
                       ),
                       const SizedBox(height: 10),
-                      Text(
-                        'asldkfjasd sld;fkjs odflksdjf sad;fkljsadio fjsd;lfjksd;iofjasd;lfj as;ldfjasdofjasd;lkfjaweoifjsdlfjasdklfjas df;sdklfjsd;iofjoas;djfklasdjf;oisdjf;lsajga;lgjasiofj  sdf;iasdojfosjf a;l',
-                        style: Theme.of(context).textTheme.bodyText2,
+                      RichText(
                         textAlign: TextAlign.justify,
-                      )
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                                text:
+                                    'You understand that by using Services, you are agreeing to be bound by these Terms, including any and all of your warranties and representations contained herein. If you do not accept these Terms in their entirety, you may not access or use the Services. If you agree to these Terms on behalf of an entity, you represent and warrant that you have the authority to bind that entity to these Terms. In that event, "you" and "your" will refer and apply to that entity. ',
+                                style: Theme.of(context).textTheme.bodyText2),
+                            TextSpan(
+                              text: 'Learn More',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2!
+                                  .copyWith(
+                                    color: Colors.blue,
+                                  ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  launchUrl(Uri.parse(
+                                      "https://bullslot.ng/#/terms-and-conditions"));
+                                },
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),

@@ -67,7 +67,7 @@ class _ProductListingWidgetState extends State<ProductListingWidget> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 child: Text(
-                  'Time: ${utils.getRemainingTime(widget.product!.date!)}',
+                  utils.getRemainingTime(widget.product!.date!),
                   style: Theme.of(context)
                       .textTheme
                       .headline2!

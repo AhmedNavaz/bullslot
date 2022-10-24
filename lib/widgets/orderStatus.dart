@@ -143,7 +143,7 @@ class _OrderStatusWidgetState extends State<OrderStatusWidget> {
             result.bounds.bottom + 30,
             quantityCellBounds!.width,
             quantityCellBounds!.height));
-    page.graphics.drawString(getTotalAmount(grid).toString(),
+    page.graphics.drawString((getTotalAmount(grid) + fee).toString(),
         PdfStandardFont(PdfFontFamily.helvetica, 9, style: PdfFontStyle.bold),
         bounds: Rect.fromLTWH(
             totalPriceCellBounds!.left,
@@ -222,7 +222,7 @@ class _OrderStatusWidgetState extends State<OrderStatusWidget> {
         widget.orderStatus!.productId!.split('-').first.toUpperCase(),
         product!.title!,
         double.parse(price.toStringAsFixed(2)),
-        widget.orderStatus!.slots!,
+        quantity,
         double.parse((price * quantity).toStringAsFixed(2)),
         grid);
     //Apply the table built-in style

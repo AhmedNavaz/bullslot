@@ -5,17 +5,23 @@ import 'package:path_provider/path_provider.dart';
 
 class Utils {
   String getRemainingTime(DateTime date) {
-    var hours = date.difference(DateTime.now()).inHours;
+    var days = date.difference(DateTime.now()).inDays;
+    var hours = date.difference(DateTime.now()).inHours % 24;
     var minutes = date.difference(DateTime.now()).inMinutes % 60;
     var seconds = date.difference(DateTime.now()).inSeconds % 60;
-    String remaining = '$hours:'.padLeft(3, '0') +
-        '$minutes:'.padLeft(3, '0') +
+    String remaining = '$days'.padLeft(2, '0') +
+        'd ' +
+        '$hours'.padLeft(2, '0') +
+        'hr ' +
+        '$minutes'.padLeft(2, '0') +
+        'm :' +
         '$seconds'.padLeft(2, '0');
     if (remaining.contains('-')) {
-      return 'Expired';
+      return '00 00 00 00';
     }
     return remaining;
   }
+
 
   Future<void> saveAndOpenInvoice(List<int> bytes, String filename) async {
     final path = (await getApplicationDocumentsDirectory()).path;

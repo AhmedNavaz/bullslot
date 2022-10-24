@@ -7,6 +7,7 @@ import 'package:bullslot/services/local_push_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../controllers/authController.dart';
 import '../router/routerGenerator.dart';
@@ -112,12 +113,17 @@ class _BottomNavBarState extends State<BottomNavBar> {
                   ListTile(
                     leading: const Icon(Icons.group_outlined),
                     title: const Text('About Us'),
-                    onTap: () {},
+                    onTap: () {
+                      launchUrl(Uri.parse("https://bullslot.ng/#/"));
+                    },
                   ),
                   ListTile(
                     leading: const Icon(Icons.policy_outlined),
                     title: const Text('Terms and Conditions'),
-                    onTap: () {},
+                    onTap: () {
+                      launchUrl(Uri.parse(
+                          "https://bullslot.ng/#/terms-and-conditions"));
+                    },
                   ),
                   ListTile(
                     leading: const Icon(Icons.logout_outlined),

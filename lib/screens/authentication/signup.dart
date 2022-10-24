@@ -178,8 +178,8 @@ class _SignupScreenState extends State<SignupScreen> {
                           ),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                          launchUrl(
-                              Uri.parse("https://warmmatch.com/?page_id=113"));
+                          launchUrl(Uri.parse(
+                              "https://bullslot.ng/#/terms-and-conditions"));
                         },
                     ),
                     TextSpan(
@@ -199,8 +199,8 @@ class _SignupScreenState extends State<SignupScreen> {
                           ),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                          launchUrl(
-                              Uri.parse("https://warmmatch.com/?page_id=52"));
+                          launchUrl(Uri.parse(
+                              "https://bullslot.ng/#/privacy-policy"));
                         },
                     ),
                   ]),
