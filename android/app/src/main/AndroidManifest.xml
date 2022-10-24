@@ -2,8 +2,9 @@
     package="com.example.bullslot">
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:label="bullslot"
+        android:label="Bullslot"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity
